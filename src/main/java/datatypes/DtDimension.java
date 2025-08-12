@@ -6,6 +6,12 @@ public class DtDimension {
     int width;
     int depth;
 
+	public DtDimension(int length, int width, int depth) {
+		this.length = length;
+		this.width = width;
+		this.depth = depth;
+	}
+
     public int getLength() {
         return this.length;
     }
