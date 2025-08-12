@@ -1,3 +1,5 @@
+package logica;
+
 import logica.Usuario;
 
 public class Bibliotecario extends Usuario {
