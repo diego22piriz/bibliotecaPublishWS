@@ -2,9 +2,9 @@ package datatypes;
 
 public class DtFecha {
     
-    int day;
-    int month;
-    int year;
+    private int day;
+    private int month;
+    private int year;
 
     public DtFecha(int day, int month, int year) {
 		this.day = day;
