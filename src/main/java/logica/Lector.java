@@ -5,15 +5,19 @@ import datatypes.RedBiblioteca;
 import logica.Usuario;
 
 public class Lector extends Usuario {
+
+    // Atributos
     private String direccion;
     private DtFecha fechaRegistro;
     private boolean activo;
     private RedBiblioteca redBiblioteca;
 
+    // Constructor por defecto
     public Lector() {
         super();
     }
 
+    // Constructor con parámetros
     public Lector(String nombre, String correo, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
 		super(nombre, correo);
         this.direccion = direccion;
@@ -22,6 +26,7 @@ public class Lector extends Usuario {
         this.redBiblioteca = redBiblioteca;
 	}
 
+    // Getters
     public String getDireccion() {
         return this.direccion;
     }
@@ -38,6 +43,7 @@ public class Lector extends Usuario {
         return this.redBiblioteca;
     }
 
+    // Setters
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }

@@ -3,14 +3,18 @@ package logica;
 import datatypes.DtDimension;
 
 public class ArticuloEspecial extends Material {
+
+    // Atributos
     private String descripcion;
     private float peso;
     private DtDimension dimension;
 
+    // Constructor por defecto
     public ArticuloEspecial() {
         super();
     }
 
+    // Constructor con parámetros
     public ArticuloEspecial(String descripcion, float peso, DtDimension dimension) {
         super();
         this.descripcion = descripcion;
@@ -18,6 +22,7 @@ public class ArticuloEspecial extends Material {
         this.dimension = new DtDimension(dimension.getLength(), dimension.getWidth(), dimension.getDepth());
     }
 
+    // Getters
     public String getDescripcion() {
         return this.descripcion;
     }
@@ -30,6 +35,7 @@ public class ArticuloEspecial extends Material {
         return new DtDimension(this.dimension.getLength(), this.dimension.getWidth(), this.dimension.getDepth());
     }
 
+    // Setters
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
