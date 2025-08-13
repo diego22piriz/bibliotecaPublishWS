@@ -1,0 +1,38 @@
+[1mdiff --git a/src/main/java/logica/Libro.java b/src/main/java/logica/Libro.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e236a2e[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/logica/Libro.java[m
+[36m@@ -0,0 +1,32 @@[m
+[32m+[m[32mpackage logica;[m
+[32m+[m
+[32m+[m[32mpublic class Libro extends Material {[m
+[32m+[m[32m    private String titulo;[m
+[32m+[m[32m    private int cantPaginas;[m
+[32m+[m
+[32m+[m[32m    public Libro() {[m
+[32m+[m[32m        super();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public Libro(String titulo, int cantPaginas) {[m
+[32m+[m[32m        super();[m
+[32m+[m[32m        this.titulo = titulo;[m
+[32m+[m[32m        this.cantPaginas = cantPaginas;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public String getTitulo() {[m
+[32m+[m[32m        return this.titulo;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public void setTitulo(String titulo) {[m
+[32m+[m[32m        this.titulo = titulo;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public int getCantPaginas() {[m
+[32m+[m[32m        return this.cantPaginas;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public void setCantPaginas(int cantPaginas) {[m
+[32m+[m[32m        this.cantPaginas = cantPaginas;[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
