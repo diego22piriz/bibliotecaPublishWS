@@ -1,24 +1,40 @@
 package logica;
 
-public class Usuario {
+import javax.persistence.*;
+import java.io.Serializable;
 
-    // Atributos
-	private String nombre;
-	private String correo;
+@Entity
+@Table(name = "usuarios")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Usuario implements Serializable {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "nombre", nullable = false, length = 100)
+    private String nombre;
+    
+    @Column(name = "correo", nullable = false, unique = true, length = 100)
+    private String correo;
 
     // Constructor por defecto
     public Usuario() {
-		super();
-	}
+        super();
+    }
 
     // Constructor con parámetros
     public Usuario(String nombre, String correo) {
-		super();
+        super();
         this.nombre = nombre;
         this.correo = correo;
-	}
+    }
 
     // Getters
+    public Long getId() {
+        return id;
+    }
+    
     public String getNombre() {
         return nombre;
     }
@@ -28,6 +44,10 @@ public class Usuario {
     }
 
     // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

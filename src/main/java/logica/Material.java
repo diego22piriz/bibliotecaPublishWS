@@ -1,14 +1,33 @@
 package logica;
 
 import datatypes.DtFecha;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "materiales")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Material {
 
     // Atributos
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "day", column = @Column(name = "fecha_ingreso_dia")),
+        @AttributeOverride(name = "month", column = @Column(name = "fecha_ingreso_mes")),
+        @AttributeOverride(name = "year", column = @Column(name = "fecha_ingreso_anio"))
+    })
     private DtFecha fechaIngreso;
+    
+    @Column(name = "titulo", nullable = false, length = 200)
     private String titulo;
+    
+    @Column(name = "autor", nullable = false, length = 100)
     private String autor;
+    
+    @Column(name = "estado", nullable = false, length = 20)
     private String estado;
 
     // Constructor por defecto
@@ -17,8 +36,7 @@ public class Material {
     }
 
     // Constructor con parámetros
-    public Material(int id, DtFecha fechaIngreso, String titulo, String autor) {
-        this.id = id;
+    public Material(DtFecha fechaIngreso, String titulo, String autor) {
         this.fechaIngreso = fechaIngreso;
         this.titulo = titulo;
         this.autor = autor;
@@ -26,7 +44,7 @@ public class Material {
     }
 
     // Getters
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -47,7 +65,7 @@ public class Material {
     }
 
     // Setters
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

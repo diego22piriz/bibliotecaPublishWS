@@ -1,11 +1,24 @@
 package logica;
 
-import logica.Usuario;
+import datatypes.DtFecha;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "bibliotecarios")
+@PrimaryKeyJoinColumn(name = "usuario_id")
 public class Bibliotecario extends Usuario {
 
     // Atributos
-    private int numEmpleado;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "day", column = @Column(name = "fecha_contratacion_dia")),
+        @AttributeOverride(name = "month", column = @Column(name = "fecha_contratacion_mes")),
+        @AttributeOverride(name = "year", column = @Column(name = "fecha_contratacion_anio"))
+    })
+    private DtFecha fechaContratacion;
+    
+    @Column(name = "especialidad", length = 100)
+    private String especialidad;
 
     // Constructor por defecto
     public Bibliotecario() {
@@ -13,18 +26,27 @@ public class Bibliotecario extends Usuario {
     }
 
     // Constructor con parámetros
-    public Bibliotecario(String nombre, String correo, int numEmpleado) {
+    public Bibliotecario(String nombre, String correo, DtFecha fechaContratacion, String especialidad) {
 		super(nombre, correo);
-        this.numEmpleado = numEmpleado;
+        this.fechaContratacion = fechaContratacion;
+        this.especialidad = especialidad;
 	}
 
     // Getters
-    public int getNumEmpleado() {
-        return this.numEmpleado;
+    public DtFecha getFechaContratacion() {
+        return this.fechaContratacion;
+    }
+    
+    public String getEspecialidad() {
+        return this.especialidad;
     }
 
     // Setters
-    public void setNumEmpleado(int numEmpleado) {
-        this.numEmpleado = numEmpleado;
+    public void setFechaContratacion(DtFecha fechaContratacion) {
+        this.fechaContratacion = fechaContratacion;
+    }
+    
+    public void setEspecialidad(String especialidad) {
+        this.especialidad = especialidad;
     }
 }
