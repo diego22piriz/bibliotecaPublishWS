@@ -1,3 +1,5 @@
+package logica;
+
 import datatypes.DtDimension;
 
 public class ArticuloEspecial extends Material {
