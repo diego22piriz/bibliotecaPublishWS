@@ -1,6 +1,6 @@
 import datatypes.DtDimension;
 
-public class ArticuloEspecial extends Maaterial {
+public class ArticuloEspecial extends Material {
     private String descripcion;
     private float peso;
     private DtDimension dimension;
