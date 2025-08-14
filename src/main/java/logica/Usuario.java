@@ -1,12 +1,11 @@
 package logica;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "usuarios")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario implements Serializable {
+public class Usuario {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
