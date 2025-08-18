@@ -19,14 +19,12 @@ public class ManejadorUsuario {
         return instancia;
     }
     
-    // AHORA SÍ usa la Factory
     public void agregarUsuario(String nombre, String correo, String tipo) {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
         
         em.getTransaction().begin();
         
-        // ✅ USAR LA FACTORY
         Usuario usuario = UsuarioFactory.crearUsuario(tipo, nombre, correo);
         
         if (usuario != null) {
