@@ -1,10 +1,17 @@
 package persistencia;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 public class Conexion {
     
     private static Conexion instancia = null;
+    private EntityManagerFactory emf;
     
-    private Conexion() {}
+    private Conexion() {
+        emf = Persistence.createEntityManagerFactory("bibliotecaPU");
+    }
     
     public static Conexion getInstancia() {
         if (instancia == null) {
@@ -13,7 +20,7 @@ public class Conexion {
         return instancia;
     }
     
-    public Object getEntityManager() {
-        return null;
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 }
