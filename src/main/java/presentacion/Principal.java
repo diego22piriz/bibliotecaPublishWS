@@ -181,6 +181,12 @@ public class Principal extends JFrame {
         
         // Botones de registro
         JButton btnRegistrarUsuario = createActionButton("Registrar Usuario", new Color(46, 204, 113));
+        btnRegistrarUsuario.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                registrarUsuario();
+            }
+        });
+        
         JButton btnRegistrarLibro = createActionButton("Registrar Libro", new Color(52, 152, 219));
         JButton btnRegistrarPrestamo = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
         JButton btnRegistrarDevolucion = createActionButton("Registrar Devolución", new Color(231, 76, 60));
@@ -256,5 +262,39 @@ public class Principal extends JFrame {
         });
         
         return button;
+    }
+
+    // Método para manejar el registro de usuario
+    private void registrarUsuario() {
+        String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del usuario:");
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            String correo = JOptionPane.showInputDialog(this, "Ingrese el correo del usuario:");
+            if (correo != null && !correo.trim().isEmpty()) {
+                String[] opciones = {"Lector", "Bibliotecario"};
+                String tipo = (String) JOptionPane.showInputDialog(this, 
+                    "Seleccione el tipo de usuario:", 
+                    "Tipo de Usuario", 
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null, 
+                    opciones, 
+                    opciones[0]);
+                
+                if (tipo != null) {
+                    try {
+                        logica.ManejadorUsuario.getInstancia().agregarUsuario(nombre, correo, tipo);
+                        JOptionPane.showMessageDialog(this, 
+                            "Usuario registrado exitosamente", 
+                            "Éxito", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Error al registrar usuario: " + ex.getMessage(), 
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }
