@@ -3,3 +3,16 @@ Primero proyecto de Programación de aplicaciones
 Piriz, Sarazola, Bergara.
 
 https://github.com/lucasb1010/ProgApProy.git
+
+Los comandos git branch te permiten gestionar ramas en Git, como crear, listar, eliminar y renombrar ramas. El comando git branch sin argumentos lista las ramas locales, marcando la rama actual con un asterisco. Puedes crear una nueva rama con git branch <nombre_rama>, cambiar entre ramas con git checkout <nombre_rama>, eliminar una rama con git branch -d <nombre_rama> (o -D para forzar la eliminación), y renombrar una rama con git branch -m <nombre_rama>. 
+Lista de comandos git branch más comunes:
+git branch: Lista todas las ramas locales, marcando la rama actual.
+git branch <nombre_rama>: Crea una nueva rama con el nombre especificado.
+git branch -d <nombre_rama>: Elimina la rama local especificada. Requiere que la rama esté fusionada con otra rama para poder ser eliminada.
+git branch -D <nombre_rama>: Elimina la rama local especificada, incluso si tiene cambios no fusionados. Uso peligroso, se recomienda evitar a menos que se sepa lo que se está haciendo.
+git branch -m <nombre_rama_actual> <nuevo_nombre_rama>: Renombra la rama actual.
+git branch -a: Lista todas las ramas, tanto locales como remotas.
+git branch -r: Lista las ramas remotas.
+git branch -u <nombre_remoto>/<nombre_rama>: Establece la rama remota como seguimiento de la rama local. Útil para sincronizar las ramas locales con las remotas. 
+
+para iniciar la bd usar: docker run --name database-container -e POSTGRES_USER=el-username -e POSTGRES_PASSWORD=la-password -e POSTGRES_DB=database-name -p 5434:5432 -d postgres

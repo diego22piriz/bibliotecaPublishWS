@@ -8,14 +8,11 @@ import javax.persistence.*;
 public class Usuario {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "correo", nullable = false, length = 100)
+    private String correo;
     
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    
-    @Column(name = "correo", nullable = false, unique = true, length = 100)
-    private String correo;
 
     // Constructor por defecto
     public Usuario() {
@@ -30,28 +27,20 @@ public class Usuario {
     }
 
     // Getters
-    public Long getId() {
-        return id;
+    public String getCorreo() {
+        return correo;
     }
     
     public String getNombre() {
         return nombre;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
     // Setters
-    public void setId(Long id) {
-        this.id = id;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
     
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
     }
 }
