@@ -281,7 +281,8 @@ public class Principal extends JFrame {
                 
                 if (tipo != null) {
                     try {
-                        logica.ManejadorUsuario.getInstancia().agregarUsuario(nombre, correo, tipo);
+                        logica.Controlador controlador = new logica.Controlador();
+                        controlador.agregarUsuario(nombre, correo, tipo);
                         JOptionPane.showMessageDialog(this, 
                             "Usuario registrado exitosamente", 
                             "Éxito", 
