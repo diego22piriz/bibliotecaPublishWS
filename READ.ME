@@ -14,3 +14,5 @@ git branch -m <nombre_rama_actual> <nuevo_nombre_rama>: Renombra la rama actual.
 git branch -a: Lista todas las ramas, tanto locales como remotas.
 git branch -r: Lista las ramas remotas.
 git branch -u <nombre_remoto>/<nombre_rama>: Establece la rama remota como seguimiento de la rama local. Útil para sincronizar las ramas locales con las remotas. 
+
+para iniciar la bd usar: docker run --name database-container -e POSTGRES_USER=el-username -e POSTGRES_PASSWORD=la-password -e POSTGRES_DB=database-name -p 5434:5432 -d postgres
