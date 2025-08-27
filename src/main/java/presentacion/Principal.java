@@ -271,29 +271,62 @@ public class Principal extends JFrame {
             String correo = JOptionPane.showInputDialog(this, "Ingrese el correo del usuario:");
             if (correo != null && !correo.trim().isEmpty()) {
                 String[] opciones = {"Lector", "Bibliotecario"};
-                String tipo = (String) JOptionPane.showInputDialog(this, 
-                    "Seleccione el tipo de usuario:", 
-                    "Tipo de Usuario", 
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, 
-                    opciones, 
+                String tipo = (String) JOptionPane.showInputDialog(this,
+                    "Seleccione el tipo de usuario (no existe Usuario genérico):",
+                    "Tipo de Usuario",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
                     opciones[0]);
-                
-                if (tipo != null) {
-                    try {
-                        logica.Controlador controlador = new logica.Controlador();
-                        controlador.agregarUsuario(nombre, correo, tipo);
-                        JOptionPane.showMessageDialog(this, 
-                            "Usuario registrado exitosamente", 
-                            "Éxito", 
-                            JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, 
-                            "Error al registrar usuario: " + ex.getMessage(), 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace();
+
+                if (tipo == null) return; // canceló
+
+                try {
+                    logica.Controlador controlador = new logica.Controlador();
+                    if ("Lector".equals(tipo)) {
+                        String direccion = JOptionPane.showInputDialog(this, "Dirección del lector:");
+                        if (direccion == null || direccion.trim().isEmpty()) return;
+
+                        String diaStr = JOptionPane.showInputDialog(this, "Fecha registro - día (1-31):");
+                        String mesStr = JOptionPane.showInputDialog(this, "Fecha registro - mes (1-12):");
+                        String anioStr = JOptionPane.showInputDialog(this, "Fecha registro - año (e.g., 2024):");
+                        int dia = Integer.parseInt(diaStr);
+                        int mes = Integer.parseInt(mesStr);
+                        int anio = Integer.parseInt(anioStr);
+
+                        int activoOption = JOptionPane.showConfirmDialog(this, "¿Lector activo?", "Estado", JOptionPane.YES_NO_OPTION);
+                        boolean activo = (activoOption == JOptionPane.YES_OPTION);
+
+                        String[] zonas = {
+                            "BIBLIOTECA_CENTRAL",
+                            "SUCURSAL_ESTE",
+                            "SUCURSAL_OESTE",
+                            "BIBLIOTECA_INFANTIL",
+                            "ARCHIVO_GENERAL"
+                        };
+                        String zonaSel = (String) JOptionPane.showInputDialog(this, "Zona:", "Zona",
+                                JOptionPane.QUESTION_MESSAGE, null, zonas, zonas[0]);
+                        if (zonaSel == null) return;
+
+                        datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
+                        datatypes.RedBiblioteca zona = datatypes.RedBiblioteca.valueOf(zonaSel);
+
+                        controlador.agregarLector(nombre, correo, direccion, fecha, activo, zona);
+                    } else if ("Bibliotecario".equals(tipo)) {
+                        // numeroEmpleado se genera automáticamente en la BD
+                        controlador.agregarBibliotecario(nombre, correo);
                     }
+
+                    JOptionPane.showMessageDialog(this,
+                        "Usuario registrado exitosamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,
+                        "Error al registrar usuario: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
             }
         }

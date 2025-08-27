@@ -1,6 +1,5 @@
 package logica;
 
-import datatypes.DtFecha;
 import javax.persistence.*;
 
 @Entity
@@ -8,45 +7,24 @@ import javax.persistence.*;
 @PrimaryKeyJoinColumn(name = "usuario_id")
 public class Bibliotecario extends Usuario {
 
-    // Atributos
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "day", column = @Column(name = "fecha_contratacion_dia")),
-        @AttributeOverride(name = "month", column = @Column(name = "fecha_contratacion_mes")),
-        @AttributeOverride(name = "year", column = @Column(name = "fecha_contratacion_anio"))
-    })
-    private DtFecha fechaContratacion;
-    
-    @Column(name = "especialidad", length = 100)
-    private String especialidad;
+    // Autogenerado por la BD (serial) y cargado al insertar
+    @org.hibernate.annotations.Generated(org.hibernate.annotations.GenerationTime.INSERT)
+    @Column(name = "numero_empleado", nullable = false, unique = true, columnDefinition = "serial", insertable = true, updatable = false)
+    private Integer numeroEmpleado;
 
-    // Constructor por defecto
-    public Bibliotecario() {
-        super();
+    public Bibliotecario() { 
+        super(); 
     }
 
-    // Constructor con parámetros
-    public Bibliotecario(String nombre, String correo, DtFecha fechaContratacion, String especialidad) {
-		super(nombre, correo);
-        this.fechaContratacion = fechaContratacion;
-        this.especialidad = especialidad;
-	}
+    public Bibliotecario(String nombre, String correo) {
+        super(nombre, correo);
+    }
 
-    // Getters
-    public DtFecha getFechaContratacion() {
-        return this.fechaContratacion;
+    public Integer getNumeroEmpleado() { 
+        return numeroEmpleado; 
     }
     
-    public String getEspecialidad() {
-        return this.especialidad;
-    }
-
-    // Setters
-    public void setFechaContratacion(DtFecha fechaContratacion) {
-        this.fechaContratacion = fechaContratacion;
-    }
-    
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
+    public void setNumeroEmpleado(Integer numeroEmpleado) { 
+        this.numeroEmpleado = numeroEmpleado; 
     }
 }
