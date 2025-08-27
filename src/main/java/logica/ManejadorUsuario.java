@@ -10,16 +10,16 @@ import datatypes.RedBiblioteca;
 public class ManejadorUsuario {
     
     private static ManejadorUsuario instancia = null;
-    
+
     private ManejadorUsuario() {}
-    
+
     public static ManejadorUsuario getInstancia() {
         if (instancia == null) {
             instancia = new ManejadorUsuario();
         }
         return instancia;
     }
-    
+
     public void agregarUsuario(String nombre, String correo, String tipo) {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
@@ -37,12 +37,7 @@ public class ManejadorUsuario {
         em.getTransaction().commit();
     }
 
-    public void agregarLector(String nombre,
-                              String correo,
-                              String direccion,
-                              DtFecha fechaRegistro,
-                              boolean activo,
-                              RedBiblioteca redBiblioteca) {
+    public void agregarLector(String nombre, String correo, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
         em.getTransaction().begin();
@@ -59,7 +54,7 @@ public class ManejadorUsuario {
         em.persist(bibliotecario);
         em.getTransaction().commit();
     }
-    
+
     public boolean existeUsuario(String correo) {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
