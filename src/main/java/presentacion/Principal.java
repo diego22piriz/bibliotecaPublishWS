@@ -287,8 +287,8 @@ public class Principal extends JFrame {
                         String direccion = JOptionPane.showInputDialog(this, "Dirección del lector:");
                         if (direccion == null || direccion.trim().isEmpty()) return;
 
-                        String diaStr = JOptionPane.showInputDialog(this, "Fecha registro - día (1-31):");
-                        String mesStr = JOptionPane.showInputDialog(this, "Fecha registro - mes (1-12):");
+                        String diaStr = JOptionPane.showInputDialog(this, "Fecha registro - día (1 - 31):");
+                        String mesStr = JOptionPane.showInputDialog(this, "Fecha registro - mes (1 - 12):");
                         String anioStr = JOptionPane.showInputDialog(this, "Fecha registro - año (e.g., 2024):");
                         int dia = Integer.parseInt(diaStr);
                         int mes = Integer.parseInt(mesStr);
