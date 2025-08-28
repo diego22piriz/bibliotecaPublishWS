@@ -1,11 +1,11 @@
 package logica;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.EntityManager;
 import persistencia.Conexion;
 import datatypes.DtFecha;
 import datatypes.RedBiblioteca;
+import datatypes.DtBibliotecario;
+import datatypes.DtLector;
 
 public class ManejadorUsuario {
     
@@ -37,20 +37,20 @@ public class ManejadorUsuario {
         em.getTransaction().commit();
     }
 
-    public void agregarLector(String nombre, String correo, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
+    public void agregarLector(DtLector dtLector) {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
         em.getTransaction().begin();
-        Usuario lector = UsuarioFactory.crearLector(nombre, correo, fechaRegistro, direccion, activo, redBiblioteca);
+        Usuario lector = UsuarioFactory.crearLector(dtLector.getNombre(), dtLector.getCorreo(), dtLector.getFechaRegistro(), dtLector.getDireccion(), dtLector.getActivo(), dtLector.getRedBiblioteca());
         em.persist(lector);
         em.getTransaction().commit();
     }
 
-    public void agregarBibliotecario(String nombre, String correo) {
+    public void agregarBibliotecario(DtBibliotecario dtBibliotecario) {
         Conexion cx = Conexion.getInstancia();
         EntityManager em = cx.getEntityManager();
         em.getTransaction().begin();
-        Usuario bibliotecario = UsuarioFactory.crearBibliotecario(nombre, correo);
+        Usuario bibliotecario = UsuarioFactory.crearBibliotecario(dtBibliotecario.getNombre(), dtBibliotecario.getCorreo());
         em.persist(bibliotecario);
         em.getTransaction().commit();
     }

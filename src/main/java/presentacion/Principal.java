@@ -310,11 +310,12 @@ public class Principal extends JFrame {
 
                         datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
                         datatypes.RedBiblioteca zona = datatypes.RedBiblioteca.valueOf(zonaSel);
-
-                        controlador.agregarLector(nombre, correo, direccion, fecha, activo, zona);
+                        datatypes.DtLector dtLector = new datatypes.DtLector(nombre, correo, direccion, fecha, activo, zona);
+                        controlador.agregarLector(dtLector);
                     } else if ("Bibliotecario".equals(tipo)) {
                         // numeroEmpleado se genera automáticamente en la BD
-                        controlador.agregarBibliotecario(nombre, correo);
+                        datatypes.DtBibliotecario dtBibliotecario = new datatypes.DtBibliotecario(nombre, correo);
+                        controlador.agregarBibliotecario(dtBibliotecario);
                     }
 
                     JOptionPane.showMessageDialog(this,
