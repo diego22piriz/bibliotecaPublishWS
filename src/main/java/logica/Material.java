@@ -6,12 +6,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "materiales")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Material {
+public abstract class Material {
 
-    // Atributos
+    // Atributos según el diagrama UML
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false, length = 100)
+    private String id;
     
     @Embedded
     @AttributeOverrides({
@@ -20,31 +20,20 @@ public class Material {
         @AttributeOverride(name = "year", column = @Column(name = "fecha_ingreso_anio"))
     })
     private DtFecha fechaIngreso;
-    
-    @Column(name = "titulo", nullable = false, length = 200)
-    private String titulo;
-    
-    @Column(name = "autor", nullable = false, length = 100)
-    private String autor;
-    
-    @Column(name = "estado", nullable = false, length = 20)
-    private String estado;
 
-    // Constructor por defecto
-    public Material() {
+    // Constructor por defecto requerido por JPA
+    protected Material() {
         super();
     }
 
     // Constructor con parámetros
-    public Material(DtFecha fechaIngreso, String titulo, String autor) {
+    protected Material(String id, DtFecha fechaIngreso) {
+        this.id = id;
         this.fechaIngreso = fechaIngreso;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.estado = "DISPONIBLE";
     }
 
     // Getters
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -52,36 +41,12 @@ public class Material {
         return this.fechaIngreso;
     }
 
-    public String getTitulo() {
-        return this.titulo;
-    }
-
-    public String getAutor() {
-        return this.autor;
-    }
-
-    public String getEstado() {
-        return this.estado;
-    }
-
     // Setters
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public void setFechaIngreso(DtFecha fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 }
