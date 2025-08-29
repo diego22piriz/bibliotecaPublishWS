@@ -5,67 +5,42 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "libros")
-@PrimaryKeyJoinColumn(name = "material_id")
 public class Libro extends Material {
+    
+    // Atributos específicos de Libro según el diagrama UML
+    @Column(name = "titulo", nullable = false, length = 200)
+    private String titulo;
+    
+    @Column(name = "cantidad_paginas", nullable = false, length = 10)
+    private String cantidadPaginas;
 
-    // Atributos
-    @Column(name = "isbn", unique = true, length = 13)
-    private String isbn;
-    
-    @Column(name = "editorial", length = 100)
-    private String editorial;
-    
-    @Column(name = "anio_publicacion")
-    private Integer anioPublicacion;
-    
-    @Column(name = "cant_paginas")
-    private Integer cantPaginas;
-
-    // Constructor por defecto
+    // Constructor por defecto requerido por JPA
     public Libro() {
         super();
     }
 
     // Constructor con parámetros
-    public Libro(String titulo, String autor, String isbn, String editorial, Integer anioPublicacion, Integer cantPaginas) {
-        super(new DtFecha(1, 1, 2024), titulo, autor);
-        this.isbn = isbn;
-        this.editorial = editorial;
-        this.anioPublicacion = anioPublicacion;
-        this.cantPaginas = cantPaginas;
+    public Libro(String id, DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
+        super(id, fechaIngreso);
+        this.titulo = titulo;
+        this.cantidadPaginas = cantidadPaginas;
     }
 
     // Getters
-    public String getIsbn() {
-        return this.isbn;
-    }
-    
-    public String getEditorial() {
-        return this.editorial;
-    }
-    
-    public Integer getAnioPublicacion() {
-        return this.anioPublicacion;
+    public String getTitulo() {
+        return this.titulo;
     }
 
-    public Integer getCantPaginas() {
-        return this.cantPaginas;
+    public String getCantidadPaginas() {
+        return this.cantidadPaginas;
     }
 
     // Setters
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-    
-    public void setEditorial(String editorial) {
-        this.editorial = editorial;
-    }
-    
-    public void setAnioPublicacion(Integer anioPublicacion) {
-        this.anioPublicacion = anioPublicacion;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public void setCantPaginas(Integer cantPaginas) {
-        this.cantPaginas = cantPaginas;
+    public void setCantidadPaginas(String cantidadPaginas) {
+        this.cantidadPaginas = cantidadPaginas;
     }
 }
