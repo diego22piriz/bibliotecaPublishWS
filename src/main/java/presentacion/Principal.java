@@ -187,7 +187,12 @@ public class Principal extends JFrame {
             }
         });
         
-        JButton btnRegistrarLibro = createActionButton("Registrar Libro", new Color(52, 152, 219));
+        JButton btnRegistrarLibro = createActionButton("Registrar Material", new Color(52, 152, 219));
+        btnRegistrarLibro.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                registrarMaterial();
+            }
+        });
         JButton btnRegistrarPrestamo = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
         JButton btnRegistrarDevolucion = createActionButton("Registrar Devolución", new Color(231, 76, 60));
         
@@ -271,31 +276,135 @@ public class Principal extends JFrame {
             String correo = JOptionPane.showInputDialog(this, "Ingrese el correo del usuario:");
             if (correo != null && !correo.trim().isEmpty()) {
                 String[] opciones = {"Lector", "Bibliotecario"};
-                String tipo = (String) JOptionPane.showInputDialog(this, 
-                    "Seleccione el tipo de usuario:", 
-                    "Tipo de Usuario", 
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, 
-                    opciones, 
+                String tipo = (String) JOptionPane.showInputDialog(this,
+                    "Seleccione el tipo de usuario (no existe Usuario genérico):",
+                    "Tipo de Usuario",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
                     opciones[0]);
-                
-                if (tipo != null) {
-                    try {
-                        logica.Controlador controlador = new logica.Controlador();
-                        controlador.agregarUsuario(nombre, correo, tipo);
-                        JOptionPane.showMessageDialog(this, 
-                            "Usuario registrado exitosamente", 
-                            "Éxito", 
-                            JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, 
-                            "Error al registrar usuario: " + ex.getMessage(), 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace();
+
+                if (tipo == null) return; // canceló
+
+                try {
+                    logica.Controlador controlador = new logica.Controlador();
+                    if ("Lector".equals(tipo)) {
+                        String direccion = JOptionPane.showInputDialog(this, "Dirección del lector:");
+                        if (direccion == null || direccion.trim().isEmpty()) return;
+
+                        String diaStr = JOptionPane.showInputDialog(this, "Fecha registro - día (1 - 31):");
+                        String mesStr = JOptionPane.showInputDialog(this, "Fecha registro - mes (1 - 12):");
+                        String anioStr = JOptionPane.showInputDialog(this, "Fecha registro - año (e.g., 2024):");
+                        int dia = Integer.parseInt(diaStr);
+                        int mes = Integer.parseInt(mesStr);
+                        int anio = Integer.parseInt(anioStr);
+
+                        int activoOption = JOptionPane.showConfirmDialog(this, "¿Lector activo?", "Estado", JOptionPane.YES_NO_OPTION);
+                        boolean activo = (activoOption == JOptionPane.YES_OPTION);
+
+                        String[] zonas = {
+                            "BIBLIOTECA_CENTRAL",
+                            "SUCURSAL_ESTE",
+                            "SUCURSAL_OESTE",
+                            "BIBLIOTECA_INFANTIL",
+                            "ARCHIVO_GENERAL"
+                        };
+                        String zonaSel = (String) JOptionPane.showInputDialog(this, "Zona:", "Zona",
+                                JOptionPane.QUESTION_MESSAGE, null, zonas, zonas[0]);
+                        if (zonaSel == null) return;
+
+                        datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
+                        datatypes.RedBiblioteca zona = datatypes.RedBiblioteca.valueOf(zonaSel);
+                        datatypes.DtLector dtLector = new datatypes.DtLector(nombre, correo, direccion, fecha, activo, zona);
+                        controlador.agregarLector(dtLector);
+                    } else if ("Bibliotecario".equals(tipo)) {
+                        // numeroEmpleado se genera automáticamente en la BD
+                        datatypes.DtBibliotecario dtBibliotecario = new datatypes.DtBibliotecario(nombre, correo);
+                        controlador.agregarBibliotecario(dtBibliotecario);
                     }
+
+                    JOptionPane.showMessageDialog(this,
+                        "Usuario registrado exitosamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,
+                        "Error al registrar usuario: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
             }
+        }
+    }
+
+    // Método para manejar el registro de material
+    private void registrarMaterial() {
+        String diaStr = JOptionPane.showInputDialog(this, "Fecha ingreso - día (1 - 31):");
+        if (diaStr == null || diaStr.trim().isEmpty()) return;
+        String mesStr = JOptionPane.showInputDialog(this, "Fecha ingreso - mes (1 - 12):");
+        if (mesStr == null || mesStr.trim().isEmpty()) return;
+        String anioStr = JOptionPane.showInputDialog(this, "Fecha ingreso - año (e.g., 2024):");
+        if (anioStr == null || anioStr.trim().isEmpty()) return;
+
+        int dia = Integer.parseInt(diaStr);
+        int mes = Integer.parseInt(mesStr);
+        int anio = Integer.parseInt(anioStr);
+
+        String[] opciones = {"Libro", "Articulo"};
+        String tipo = (String) JOptionPane.showInputDialog(this,
+            "Seleccione el tipo de material (no existe Material genérico):",
+            "Tipo de Material",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]);
+
+        if (tipo == null) return; // canceló
+
+        try {
+            logica.Controlador controlador = new logica.Controlador();
+            datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
+
+            if ("Libro".equals(tipo)) {
+                String titulo = JOptionPane.showInputDialog(this, "Título del libro:");
+                if (titulo == null || titulo.trim().isEmpty()) return;
+                
+                String cantPaginas = JOptionPane.showInputDialog(this, "Cantidad de páginas:");
+                if (cantPaginas == null || cantPaginas.trim().isEmpty()) return;
+
+                datatypes.DtLibro dtLibro = new datatypes.DtLibro(fecha, titulo, cantPaginas);
+                controlador.agregarLibro(dtLibro);
+            } else if ("Articulo".equals(tipo)) {
+                String descripcion = JOptionPane.showInputDialog(this, "Descripción del artículo:");
+                if (descripcion == null || descripcion.trim().isEmpty()) return;
+                
+                String pesoStr = JOptionPane.showInputDialog(this, "Peso en kg:");
+                if (pesoStr == null || pesoStr.trim().isEmpty()) return;
+                float peso = Float.parseFloat(pesoStr);
+                
+                String dimensiones = JOptionPane.showInputDialog(this, "Dimensiones:");
+                if (dimensiones == null || dimensiones.trim().isEmpty()) return;
+
+                datatypes.DtArticulo dtArticulo = new datatypes.DtArticulo(fecha, descripcion, peso, dimensiones);
+                controlador.agregarArticulo(dtArticulo);
+            }
+
+            JOptionPane.showMessageDialog(this,
+                "Material registrado exitosamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error: Los valores de fecha deben ser números válidos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error al registrar material: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
 }
