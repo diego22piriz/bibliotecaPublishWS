@@ -75,4 +75,9 @@ public class Lector extends Usuario {
     public void setRedBiblioteca(RedBiblioteca redBiblioteca) {
         this.redBiblioteca = redBiblioteca;
     }
+
+    @Override
+    public String tipoUsuario() {
+        return "Lector";
+    }
 }

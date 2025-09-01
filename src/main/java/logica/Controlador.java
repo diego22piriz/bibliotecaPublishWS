@@ -6,6 +6,7 @@ import datatypes.DtFecha;
 import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
+import javax.swing.JOptionPane;
 
 public class Controlador implements IControlador {
     
@@ -39,4 +40,25 @@ public class Controlador implements IControlador {
         }
         manejadorUsuario.agregarBibliotecario(dtBibliotecario);
     }
+
+    public void suspenderUsuario(String correo) {
+        if (manejadorUsuario.existeUsuario(correo)) {
+            if (manejadorUsuario.getUsuario(correo).tipoUsuario().equals("Lector")) {
+                manejadorUsuario.suspenderUsuario(correo);
+                JOptionPane.showMessageDialog(null, "Usuario suspendido correctamente.");
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Usuario no es un lector.");
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Usuario no existe.");
+        }
+    }
+
+        
+       
+       
 }
+
+

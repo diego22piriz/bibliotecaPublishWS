@@ -61,4 +61,20 @@ public class ManejadorUsuario {
         Usuario usuario = em.find(Usuario.class, correo);
         return usuario != null;
     }
+    public void suspenderUsuario(String correo) {
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        em.getTransaction().begin();
+        Usuario lector = em.find(Usuario.class, correo);
+        ((Lector)lector).setActivo(false);
+        em.getTransaction().commit();
+        
+
+    }
+    public Usuario getUsuario(String correo) {
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        return em.find(Usuario.class, correo);
+    }
 }
+

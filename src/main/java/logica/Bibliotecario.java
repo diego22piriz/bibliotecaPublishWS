@@ -27,4 +27,9 @@ public class Bibliotecario extends Usuario {
     public void setNumeroEmpleado(Integer numeroEmpleado) { 
         this.numeroEmpleado = numeroEmpleado; 
     }
-}
+    
+    @Override
+    public String tipoUsuario() {
+        return "Bibliotecario";
+    }
+}   

@@ -11,6 +11,7 @@ public class Principal extends JFrame {
     private JButton btnInicio;
     private JButton btnRegistros;
     private JButton btnConsultas;
+    private JButton btnGestionarUsuarios;
     private JPanel panelCentral;
     
     public static void main(String[] args) {
@@ -86,17 +87,25 @@ public class Principal extends JFrame {
                 mostrarConsultas();
             }
         });
+
+        btnGestionarUsuarios = createMenuButton("Gestionar Usr", new Color(155, 89, 182));
+        btnGestionarUsuarios.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarGestionarUsuarios();
+            }
+        });
         
         menuPanel.add(btnInicio);
         menuPanel.add(btnRegistros);
         menuPanel.add(btnConsultas);
+        menuPanel.add(btnGestionarUsuarios);
         
         return menuPanel;
     }
     
     private JButton createMenuButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
-        button.setPreferredSize(new Dimension(120, 40));
+        button.setPreferredSize(new Dimension(160, 40));
         button.setBackground(backgroundColor);
         button.setForeground(Color.WHITE);
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -241,6 +250,48 @@ public class Principal extends JFrame {
         panelCentral.repaint();
     }
     
+
+    private void mostrarGestionarUsuarios() {
+        panelCentral.removeAll();
+        
+        JPanel gestionarUsuariosPanel = new JPanel();
+        gestionarUsuariosPanel.setLayout(new BorderLayout());
+        gestionarUsuariosPanel.setBackground(Color.WHITE);
+
+        // Título
+        JLabel tituloLabel = new JLabel("Gestionar Usuarios", SwingConstants.CENTER);
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        tituloLabel.setForeground(new Color(44, 62, 80));
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
+        gestionarUsuariosPanel.add(tituloLabel, BorderLayout.NORTH);
+        
+        // Panel de botones de gestión de usuarios
+        JPanel botonesPanel = new JPanel();
+        botonesPanel.setLayout(new GridLayout(2, 2, 20, 20));
+        botonesPanel.setBackground(Color.WHITE);
+        botonesPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        
+        
+        // Botones de gestión de usuarios
+        JButton btnGestionarLectores = createActionButton("Suspender Usuario", new Color(46, 204, 113));
+        btnGestionarLectores.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                suspenderUsuario();
+            }
+        });
+        JButton btnGestionarBibliotecarios = createActionButton("Cambiar zona", new Color(52, 152, 219));
+        
+        botonesPanel.add(btnGestionarLectores);
+        botonesPanel.add(btnGestionarBibliotecarios);
+        
+        gestionarUsuariosPanel.add(botonesPanel, BorderLayout.CENTER);
+        
+        panelCentral.add(gestionarUsuariosPanel);
+        panelCentral.revalidate();
+        panelCentral.repaint();
+
+    }
+
     private JButton createActionButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(150, 50));
@@ -330,6 +381,14 @@ public class Principal extends JFrame {
                     ex.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void suspenderUsuario() {
+        String correo = JOptionPane.showInputDialog(this, "Ingrese el correo del usuario a suspender:");
+        if (correo != null && !correo.trim().isEmpty()) {
+            logica.Controlador controlador = new logica.Controlador();
+            controlador.suspenderUsuario(correo);
         }
     }
 }

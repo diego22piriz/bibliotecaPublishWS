@@ -43,4 +43,8 @@ public abstract class Usuario {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    public String tipoUsuario() {
+        return "Usuario";
+    }
 }
