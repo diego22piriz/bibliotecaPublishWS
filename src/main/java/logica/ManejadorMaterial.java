@@ -22,31 +22,25 @@ public class ManejadorMaterial {
         }
         return instancia;
     }
-    
-    // Método genérico para agregar cualquier material
-    public void agregarMaterial(Material material) {
+
+    // Métodos específicos (EXACTAMENTE como agregarLector y agregarBibliotecario)
+    public void agregarLibro(String titulo, String cantidadPaginas) {
         em.getTransaction().begin();
-        em.persist(material);
+        Libro libro = MaterialFactory.crearLibro(id, fechaIngreso, titulo, cantidadPaginas);
+        em.persist(libro);
         em.getTransaction().commit();
     }
     
-    // Métodos específicos por tipo (similar a ManejadorUsuario)
-    public void agregarLibro(Libro libro) {
-        agregarMaterial(libro);
+    public void agregarArticulo(String descripcion, float pesoKg, String dimensiones) {
+        em.getTransaction().begin();
+        Articulo articulo = MaterialFactory.crearArticulo(descripcion, pesoKg, dimensiones);
+        em.persist(articulo);
+        em.getTransaction().commit();
     }
     
-    public void agregarArticulo(Articulo articulo) {
-        agregarMaterial(articulo);
-    }
-    
-    // Búsqueda por ID
-    public Material buscarMaterial(String id) {
-        return em.find(Material.class, id);
-    }
-    
-    // Verificar si existe un material
+    // Búsqueda (EXACTAMENTE como existeUsuario)
     public boolean existeMaterial(String id) {
-        Material material = buscarMaterial(id);
+        Material material = em.find(Material.class, id);
         return material != null;
     }
     

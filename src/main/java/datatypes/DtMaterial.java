@@ -3,22 +3,18 @@ package datatypes;
 public class DtMaterial {
 
     // Atributos
-    private Long id;
+    private String id;
     private DtFecha fechaIngreso;
-    private String titulo;
-    private String autor;
-    private String estado;
 
     // Constructor con parámetros
-    public DtMaterial(DtFecha fechaIngreso, String titulo, String autor) {
+    public DtMaterial(DtFecha fechaIngreso, String id) {
+        super();
         this.fechaIngreso = fechaIngreso;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.estado = "DISPONIBLE";
+        this.id = id;
     }
 
     // Getters
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -26,15 +22,4 @@ public class DtMaterial {
         return this.fechaIngreso;
     }
 
-    public String getTitulo() {
-        return this.titulo;
-    }
-
-    public String getAutor() {
-        return this.autor;
-    }
-
-    public String getEstado() {
-        return this.estado;
-    }
 }
