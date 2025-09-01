@@ -6,22 +6,17 @@ import datatypes.DtFecha;
 import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
+import datatypes.DtLibro;
+import datatypes.DtArticulo;
 
 public class Controlador implements IControlador {
     
     private ManejadorUsuario manejadorUsuario;
+    private ManejadorMaterial manejadorMaterial;
     
     public Controlador() {
         this.manejadorUsuario = ManejadorUsuario.getInstancia();
-    }
-    
-    @Override
-    public void agregarUsuario(String nombre, String correo, String tipo) throws UsuarioRepetidoException {
-        if (manejadorUsuario.existeUsuario(correo)) {
-            throw new UsuarioRepetidoException("Ya existe un usuario con el correo: " + correo);
-        }
-        
-        manejadorUsuario.agregarUsuario(nombre, correo, tipo);
+        this.manejadorMaterial = ManejadorMaterial.getInstancia();
     }
 
     // Métodos específicos requeridos por la UI
@@ -38,5 +33,14 @@ public class Controlador implements IControlador {
             throw new UsuarioRepetidoException("Ya existe un usuario con el correo: " + dtBibliotecario.getCorreo());
         }
         manejadorUsuario.agregarBibliotecario(dtBibliotecario);
+    }
+
+    // Métodos para materiales
+    public void agregarLibro(DtLibro dtLibro) {
+        manejadorMaterial.agregarLibro(dtLibro);
+    }
+
+    public void agregarArticulo(DtArticulo dtArticulo) {
+        manejadorMaterial.agregarArticulo(dtArticulo);
     }
 }
