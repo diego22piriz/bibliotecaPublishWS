@@ -3,6 +3,7 @@ package logica;
 
 import datatypes.DtMaterial;
 import datatypes.DtLibro;
+import datatypes.DtArticulo;
 import persistencia.Conexion;
 import javax.persistence.*;
 import java.util.List;
@@ -23,22 +24,20 @@ public class ManejadorMaterial {
         return instancia;
     }
 
-    // Métodos específicos (EXACTAMENTE como agregarLector y agregarBibliotecario)
-    public void agregarLibro(String titulo, String cantidadPaginas) {
+    public void agregarLibro(DtLibro dtLibro) {
         em.getTransaction().begin();
-        Libro libro = MaterialFactory.crearLibro(id, fechaIngreso, titulo, cantidadPaginas);
+        Libro libro = MaterialFactory.crearLibro(dtLibro);
         em.persist(libro);
         em.getTransaction().commit();
     }
     
-    public void agregarArticulo(String descripcion, float pesoKg, String dimensiones) {
+    public void agregarArticulo(DtArticulo dtArticulo) {
         em.getTransaction().begin();
-        Articulo articulo = MaterialFactory.crearArticulo(descripcion, pesoKg, dimensiones);
+        Articulo articulo = MaterialFactory.crearArticulo(dtArticulo);
         em.persist(articulo);
         em.getTransaction().commit();
     }
     
-    // Búsqueda (EXACTAMENTE como existeUsuario)
     public boolean existeMaterial(String id) {
         Material material = em.find(Material.class, id);
         return material != null;
@@ -61,13 +60,4 @@ public class ManejadorMaterial {
         return query.getResultList();
     }
     
-    // Eliminar material
-    public void eliminarMaterial(String id) {
-        Material material = buscarMaterial(id);
-        if (material != null) {
-            em.getTransaction().begin();
-            em.remove(material);
-            em.getTransaction().commit();
-        }
-    }
 }

@@ -1,15 +1,18 @@
 // ProgApProy/src/main/java/logica/MaterialFactory.java
 package logica;
 
-import datatypes.DtFecha;
+import datatypes.DtLibro;
+import datatypes.DtArticulo;
 
 public class MaterialFactory {
     
-    public static Libro crearLibro(String id, DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
-        return new Libro(id, fechaIngreso, titulo, cantidadPaginas);
+    // Método para crear un Libro desde DTO
+    public static Libro crearLibro(DtLibro dtLibro) {
+        return new Libro(dtLibro.getId(), dtLibro.getFechaIngreso(), dtLibro.getTitulo(), dtLibro.getCantidadPaginas());
     }
 
-    public static Articulo crearArticulo(String id, DtFecha fechaIngreso, String descripcion, float pesoKg, String dimensiones) {
-        return new Articulo(id, fechaIngreso, descripcion, pesoKg, dimensiones);
+    // Método para crear un Articulo desde DTO
+    public static Articulo crearArticulo(DtArticulo dtArticulo) {
+        return new Articulo(dtArticulo.getId(), dtArticulo.getFechaIngreso(), dtArticulo.getDescripcion(), dtArticulo.getPesoKg(), dtArticulo.getDimensiones());
     }
 }
