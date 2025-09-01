@@ -7,8 +7,8 @@ public class DtMaterial {
     private DtFecha fechaIngreso;
 
     // Constructor con parámetros
-    public DtMaterial(DtFecha fechaIngreso, String id) {
-        super();
+    public DtMaterial(String id, DtFecha fechaIngreso) {
+        
         this.fechaIngreso = fechaIngreso;
         this.id = id;
     }
