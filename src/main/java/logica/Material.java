@@ -7,18 +7,13 @@ import javax.persistence.*;
 @Table(name = "materiales")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Material {
-
-    // Atributos según el diagrama UML
+    
     @Id
-    @Column(name = "id", nullable = false, length = 100)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
     
     @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "day", column = @Column(name = "fecha_ingreso_dia")),
-        @AttributeOverride(name = "month", column = @Column(name = "fecha_ingreso_mes")),
-        @AttributeOverride(name = "year", column = @Column(name = "fecha_ingreso_anio"))
-    })
     private DtFecha fechaIngreso;
 
     // Constructor por defecto requerido por JPA
@@ -26,14 +21,14 @@ public abstract class Material {
         super();
     }
 
-    // Constructor con parámetros
-    protected Material(String id, DtFecha fechaIngreso) {
-        this.id = id;
+    // Constructor con parámetros (sin ID)
+    protected Material(DtFecha fechaIngreso) {
+        super();
         this.fechaIngreso = fechaIngreso;
     }
 
     // Getters
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -42,7 +37,7 @@ public abstract class Material {
     }
 
     // Setters
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

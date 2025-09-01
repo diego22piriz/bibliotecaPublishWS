@@ -9,7 +9,15 @@ public class DtArticulo extends DtMaterial {
 
     // Constructor con parámetros (siguiendo el patrón de DtLector)
     public DtArticulo(String id, DtFecha fechaIngreso, String descripcion, float pesoKg, String dimensiones) {
-        super(id, fechaIngreso); // Llama al constructor de DtMaterial con id y fechaIngreso
+        super(fechaIngreso); // Llama al constructor de DtMaterial con id y fechaIngreso
+        this.descripcion = descripcion;
+        this.pesoKg = pesoKg;
+        this.dimensiones = dimensiones;
+    }
+
+    // Constructor con parámetros (sin ID)
+    public DtArticulo(DtFecha fechaIngreso, String descripcion, float pesoKg, String dimensiones) {
+        super(fechaIngreso);
         this.descripcion = descripcion;
         this.pesoKg = pesoKg;
         this.dimensiones = dimensiones;

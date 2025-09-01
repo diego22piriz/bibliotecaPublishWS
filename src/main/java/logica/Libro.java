@@ -19,9 +19,9 @@ public class Libro extends Material {
         super();
     }
 
-    // Constructor con parámetros
-    public Libro(String id, DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
-        super(id, fechaIngreso);
+    // Constructor con parámetros (sin ID)
+    public Libro(DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
+        super(fechaIngreso);
         this.titulo = titulo;
         this.cantidadPaginas = cantidadPaginas;
     }

@@ -22,9 +22,9 @@ public class Articulo extends Material {
         super();
     }
 
-    // Constructor con parámetros
-    public Articulo(String id, DtFecha fechaIngreso, String descripcion, float pesoKg, String dimensiones) {
-        super(id, fechaIngreso);
+    // Constructor con parámetros (sin ID)
+    public Articulo(DtFecha fechaIngreso, String descripcion, float pesoKg, String dimensiones) {
+        super(fechaIngreso);
         this.descripcion = descripcion;
         this.pesoKg = pesoKg;
         this.dimensiones = dimensiones;

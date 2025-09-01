@@ -8,7 +8,14 @@ public class DtLibro extends DtMaterial {
 
     // Constructor con parámetros (siguiendo el patrón de DtArticulo)
     public DtLibro(String id, DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
-        super(id, fechaIngreso); // Llama al constructor de DtMaterial con id y fechaIngreso
+        super(fechaIngreso); // Llama al constructor de DtMaterial con id y fechaIngreso
+        this.titulo = titulo;
+        this.cantidadPaginas = cantidadPaginas;
+    }
+
+    // Constructor con parámetros (sin ID)
+    public DtLibro(DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
+        super(fechaIngreso);
         this.titulo = titulo;
         this.cantidadPaginas = cantidadPaginas;
     }

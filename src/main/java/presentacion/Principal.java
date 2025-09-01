@@ -187,7 +187,12 @@ public class Principal extends JFrame {
             }
         });
         
-        JButton btnRegistrarLibro = createActionButton("Registrar Libro", new Color(52, 152, 219));
+        JButton btnRegistrarLibro = createActionButton("Registrar Material", new Color(52, 152, 219));
+        btnRegistrarLibro.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                registrarMaterial();
+            }
+        });
         JButton btnRegistrarPrestamo = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
         JButton btnRegistrarDevolucion = createActionButton("Registrar Devolución", new Color(231, 76, 60));
         
@@ -330,6 +335,76 @@ public class Principal extends JFrame {
                     ex.printStackTrace();
                 }
             }
+        }
+    }
+
+    // Método para manejar el registro de material
+    private void registrarMaterial() {
+        String diaStr = JOptionPane.showInputDialog(this, "Fecha ingreso - día (1 - 31):");
+        if (diaStr == null || diaStr.trim().isEmpty()) return;
+        String mesStr = JOptionPane.showInputDialog(this, "Fecha ingreso - mes (1 - 12):");
+        if (mesStr == null || mesStr.trim().isEmpty()) return;
+        String anioStr = JOptionPane.showInputDialog(this, "Fecha ingreso - año (e.g., 2024):");
+        if (anioStr == null || anioStr.trim().isEmpty()) return;
+
+        int dia = Integer.parseInt(diaStr);
+        int mes = Integer.parseInt(mesStr);
+        int anio = Integer.parseInt(anioStr);
+
+        String[] opciones = {"Libro", "Articulo"};
+        String tipo = (String) JOptionPane.showInputDialog(this,
+            "Seleccione el tipo de material (no existe Material genérico):",
+            "Tipo de Material",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]);
+
+        if (tipo == null) return; // canceló
+
+        try {
+            logica.Controlador controlador = new logica.Controlador();
+            datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
+
+            if ("Libro".equals(tipo)) {
+                String titulo = JOptionPane.showInputDialog(this, "Título del libro:");
+                if (titulo == null || titulo.trim().isEmpty()) return;
+                
+                String cantPaginas = JOptionPane.showInputDialog(this, "Cantidad de páginas:");
+                if (cantPaginas == null || cantPaginas.trim().isEmpty()) return;
+
+                datatypes.DtLibro dtLibro = new datatypes.DtLibro(fecha, titulo, cantPaginas);
+                controlador.agregarLibro(dtLibro);
+            } else if ("Articulo".equals(tipo)) {
+                String descripcion = JOptionPane.showInputDialog(this, "Descripción del artículo:");
+                if (descripcion == null || descripcion.trim().isEmpty()) return;
+                
+                String pesoStr = JOptionPane.showInputDialog(this, "Peso en kg:");
+                if (pesoStr == null || pesoStr.trim().isEmpty()) return;
+                float peso = Float.parseFloat(pesoStr);
+                
+                String dimensiones = JOptionPane.showInputDialog(this, "Dimensiones:");
+                if (dimensiones == null || dimensiones.trim().isEmpty()) return;
+
+                datatypes.DtArticulo dtArticulo = new datatypes.DtArticulo(fecha, descripcion, peso, dimensiones);
+                controlador.agregarArticulo(dtArticulo);
+            }
+
+            JOptionPane.showMessageDialog(this,
+                "Material registrado exitosamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error: Los valores de fecha deben ser números válidos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error al registrar material: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
 }

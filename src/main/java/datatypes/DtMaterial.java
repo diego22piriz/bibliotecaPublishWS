@@ -6,11 +6,9 @@ public class DtMaterial {
     private String id;
     private DtFecha fechaIngreso;
 
-    // Constructor con parámetros
-    public DtMaterial(String id, DtFecha fechaIngreso) {
-        
+    // Constructor con parámetros (sin ID)
+    public DtMaterial(DtFecha fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
-        this.id = id;
     }
 
     // Getters
