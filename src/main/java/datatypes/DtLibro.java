@@ -2,35 +2,30 @@ package datatypes;
 
 public class DtLibro extends DtMaterial {
 
-    // Atributos
-    private String isbn;
-    private String editorial;
-    private Integer anioPublicacion;
-    private Integer cantPaginas;
+    // Atributos específicos de Libro según el diagrama UML
+    private String titulo;
+    private String cantidadPaginas;
 
-    // Constructor con parámetros
-    public DtLibro(String titulo, String autor, String isbn, String editorial, Integer anioPublicacion, Integer cantPaginas) {
-        super(new DtFecha(), titulo, autor);
-        this.isbn = isbn;
-        this.editorial = editorial;
-        this.anioPublicacion = anioPublicacion;
-        this.cantPaginas = cantPaginas;
+    // Constructor con parámetros (siguiendo el patrón de DtArticulo)
+    public DtLibro(String id, DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
+        super(fechaIngreso); // Llama al constructor de DtMaterial con id y fechaIngreso
+        this.titulo = titulo;
+        this.cantidadPaginas = cantidadPaginas;
+    }
+
+    // Constructor con parámetros (sin ID)
+    public DtLibro(DtFecha fechaIngreso, String titulo, String cantidadPaginas) {
+        super(fechaIngreso);
+        this.titulo = titulo;
+        this.cantidadPaginas = cantidadPaginas;
     }
 
     // Getters
-    public String getIsbn() {
-        return this.isbn;
+    public String getTitulo() {
+        return this.titulo;
     }
     
-    public String getEditorial() {
-        return this.editorial;
-    }
-    
-    public Integer getAnioPublicacion() {
-        return this.anioPublicacion;
-    }
-
-    public Integer getCantPaginas() {
-        return this.cantPaginas;
+    public String getCantidadPaginas() {
+        return this.cantidadPaginas;
     }
 }
