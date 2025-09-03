@@ -26,14 +26,23 @@ public class ManejadorMaterial {
 
     public void agregarLibro(DtLibro dtLibro) {
         em.getTransaction().begin();
-        Libro libro = MaterialFactory.crearLibro(dtLibro);
+        Libro libro = new Libro(
+            dtLibro.getFechaIngreso(),
+            dtLibro.getTitulo(),
+            dtLibro.getCantidadPaginas()
+        );
         em.persist(libro);
         em.getTransaction().commit();
     }
     
     public void agregarArticulo(DtArticulo dtArticulo) {
         em.getTransaction().begin();
-        Articulo articulo = MaterialFactory.crearArticulo(dtArticulo);
+        Articulo articulo = new Articulo(
+            dtArticulo.getFechaIngreso(),
+            dtArticulo.getDescripcion(),
+            dtArticulo.getPesoKg(),
+            dtArticulo.getDimensiones()
+        );
         em.persist(articulo);
         em.getTransaction().commit();
     }
