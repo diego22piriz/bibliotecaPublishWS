@@ -24,6 +24,10 @@ public class ManejadorMaterial {
         return instancia;
     }
 
+    public Material buscarMaterial(Long id) {
+        return em.find(Material.class, id);
+    }
+
     public void agregarLibro(DtLibro dtLibro) {
         em.getTransaction().begin();
         Libro libro = new Libro(

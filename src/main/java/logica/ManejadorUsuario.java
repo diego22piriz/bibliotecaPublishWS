@@ -6,6 +6,7 @@ import datatypes.DtFecha;
 import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
+import datatypes.DtFecha;
 
 public class ManejadorUsuario {
     
@@ -50,5 +51,13 @@ public class ManejadorUsuario {
     public boolean existeUsuario(String correo) {
         Usuario usuario = em.find(Usuario.class, correo);
         return usuario != null;
+    }
+
+    public Lector buscarLector(String correo) {
+        return em.find(Lector.class, correo);
+    }
+
+    public Bibliotecario buscarBibliotecario(String correo) {
+        return em.find(Bibliotecario.class, correo);
     }
 }

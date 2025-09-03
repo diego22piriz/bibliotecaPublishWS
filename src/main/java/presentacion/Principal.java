@@ -200,6 +200,11 @@ public class Principal extends JFrame {
             }
         });
         JButton btnRegistrarPrestamo = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
+        btnRegistrarPrestamo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                registrarPrestamo();
+            }
+        });
         JButton btnRegistrarDevolucion = createActionButton("Registrar Devolución", new Color(231, 76, 60));
         
         botonesPanel.add(btnRegistrarUsuario);
@@ -407,6 +412,39 @@ public class Principal extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                 "Error al registrar material: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    // Método para manejar el registro de préstamo
+    private void registrarPrestamo() {
+        String correoUsuario = JOptionPane.showInputDialog(this, "Correo del lector:");
+        if (correoUsuario == null || correoUsuario.trim().isEmpty()) return;
+
+        String correoBibliotecario = JOptionPane.showInputDialog(this, "Correo del bibliotecario:");
+        if (correoBibliotecario == null || correoBibliotecario.trim().isEmpty()) return;
+
+        String materialIdStr = JOptionPane.showInputDialog(this, "ID del material:");
+        if (materialIdStr == null || materialIdStr.trim().isEmpty()) return;
+
+        try {
+            int materialId = Integer.parseInt(materialIdStr);
+            controlador.agregarPrestamo(correoUsuario, correoBibliotecario, materialId);
+
+            JOptionPane.showMessageDialog(this,
+                "Préstamo registrado exitosamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error: El ID de material debe ser numérico",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error al registrar préstamo: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();

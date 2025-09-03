@@ -15,4 +15,7 @@ public interface IControlador {
     // Métodos para materiales
     void agregarLibro(DtLibro dtLibro);
     void agregarArticulo(DtArticulo dtArticulo);
+
+    // Métodos para préstamos
+    void agregarPrestamo(String usuarioCorreo, String bibliotecarioCorreo, int materialId);
 }

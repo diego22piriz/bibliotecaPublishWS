@@ -115,4 +115,8 @@ public class Prestamo {
     public void setMaterial(Material material) {
         this.material = material;
     }
+
+    public void setBibliotecario(Bibliotecario bibliotecario) {
+        this.bibliotecario = bibliotecario;
+    }
 }
