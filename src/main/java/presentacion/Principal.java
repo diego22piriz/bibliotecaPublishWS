@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import interfaces.Fabrica;
+import interfaces.IControlador;
 
 public class Principal extends JFrame {
     
@@ -12,6 +14,7 @@ public class Principal extends JFrame {
     private JButton btnRegistros;
     private JButton btnConsultas;
     private JPanel panelCentral;
+    private IControlador controlador;
     
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -43,6 +46,9 @@ public class Principal extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
         
+        // Inicializar controlador global
+        controlador = Fabrica.getInstancia().getIControlador();
+
         // Crear barra de menú superior
         JPanel menuBar = createMenuBar();
         contentPane.add(menuBar, BorderLayout.NORTH);
@@ -287,7 +293,7 @@ public class Principal extends JFrame {
                 if (tipo == null) return; // canceló
 
                 try {
-                    logica.Controlador controlador = new logica.Controlador();
+                    
                     if ("Lector".equals(tipo)) {
                         String direccion = JOptionPane.showInputDialog(this, "Dirección del lector:");
                         if (direccion == null || direccion.trim().isEmpty()) return;
@@ -363,7 +369,6 @@ public class Principal extends JFrame {
         if (tipo == null) return; // canceló
 
         try {
-            logica.Controlador controlador = new logica.Controlador();
             datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
 
             if ("Libro".equals(tipo)) {

@@ -2,8 +2,6 @@ package logica;
 
 import interfaces.IControlador;
 import excepciones.UsuarioRepetidoException;
-import datatypes.DtFecha;
-import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
 import datatypes.DtLibro;
@@ -19,7 +17,7 @@ public class Controlador implements IControlador {
         this.manejadorMaterial = ManejadorMaterial.getInstancia();
     }
 
-    // Métodos específicos requeridos por la UI
+    // Métodos específicos requeridos por la UI (usuarios)
     public void agregarLector(DtLector dtLector) throws UsuarioRepetidoException {
         if (manejadorUsuario.existeUsuario(dtLector.getCorreo())) {
             throw new UsuarioRepetidoException("Ya existe un usuario con el correo: " + dtLector.getCorreo());
@@ -27,8 +25,7 @@ public class Controlador implements IControlador {
         manejadorUsuario.agregarLector(dtLector);
     }
 
-    public void agregarBibliotecario(DtBibliotecario dtBibliotecario)
-            throws UsuarioRepetidoException {
+    public void agregarBibliotecario(DtBibliotecario dtBibliotecario) throws UsuarioRepetidoException {
         if (manejadorUsuario.existeUsuario(dtBibliotecario.getCorreo())) {
             throw new UsuarioRepetidoException("Ya existe un usuario con el correo: " + dtBibliotecario.getCorreo());
         }

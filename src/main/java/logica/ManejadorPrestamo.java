@@ -28,7 +28,7 @@ public class ManejadorPrestamo {
 
     public void agregarPrestamo(Material material, Lector usuario, Bibliotecario bibliotecario, DtFecha fechaInicio, DtFecha fechaFin) {
         em.getTransaction().begin();
-        Prestamo prestamo = PrestamoFactory.crearPrestamo(material, usuario, bibliotecario, fechaInicio, fechaFin);
+        Prestamo prestamo = new Prestamo(material, usuario, bibliotecario, fechaInicio, fechaFin);
         em.persist(prestamo);
         em.getTransaction().commit();
     }
