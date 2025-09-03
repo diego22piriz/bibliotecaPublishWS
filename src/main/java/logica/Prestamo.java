@@ -38,6 +38,10 @@ public class Prestamo {
     private Lector lector;
     
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bibliotecario_id", nullable = false)
+    private Bibliotecario bibliotecario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", nullable = false)
     private Material material;
 
@@ -51,6 +55,15 @@ public class Prestamo {
         this.fechaSolicitud = fechaSolicitud;
         this.fechaEstDev = fechaEstDev;
         this.estado = estado;
+    }
+
+    public Prestamo(Material material, Lector usuario, Bibliotecario bibliotecario, DtFecha fechaInicio, DtFecha fechaFin) {
+        this.material = material;
+        this.lector = usuario;
+        this.bibliotecario = bibliotecario;
+        this.fechaSolicitud = fechaInicio;
+        this.fechaEstDev = fechaFin;
+        this.estado = EstadoPrestamo.PENDIENTE;
     }
 
     // Getters
@@ -101,5 +114,9 @@ public class Prestamo {
     
     public void setMaterial(Material material) {
         this.material = material;
+    }
+
+    public void setBibliotecario(Bibliotecario bibliotecario) {
+        this.bibliotecario = bibliotecario;
     }
 }

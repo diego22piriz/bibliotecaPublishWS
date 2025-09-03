@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import interfaces.Fabrica;
+import interfaces.IControlador;
 
 public class Principal extends JFrame {
     
@@ -13,6 +15,7 @@ public class Principal extends JFrame {
     private JButton btnConsultas;
     private JButton btnGestionarUsuarios;
     private JPanel panelCentral;
+    private IControlador controlador;
     
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -44,6 +47,9 @@ public class Principal extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
         
+        // Inicializar controlador global
+        controlador = Fabrica.getInstancia().getIControlador();
+
         // Crear barra de menú superior
         JPanel menuBar = createMenuBar();
         contentPane.add(menuBar, BorderLayout.NORTH);
@@ -203,6 +209,11 @@ public class Principal extends JFrame {
             }
         });
         JButton btnRegistrarPrestamo = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
+        btnRegistrarPrestamo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                registrarPrestamo();
+            }
+        });
         JButton btnRegistrarDevolucion = createActionButton("Registrar Devolución", new Color(231, 76, 60));
         
         botonesPanel.add(btnRegistrarUsuario);
@@ -338,7 +349,7 @@ public class Principal extends JFrame {
                 if (tipo == null) return; // canceló
 
                 try {
-                    logica.Controlador controlador = new logica.Controlador();
+                    
                     if ("Lector".equals(tipo)) {
                         String direccion = JOptionPane.showInputDialog(this, "Dirección del lector:");
                         if (direccion == null || direccion.trim().isEmpty()) return;
@@ -392,7 +403,6 @@ public class Principal extends JFrame {
     private void suspenderUsuario() {
         String correo = JOptionPane.showInputDialog(this, "Ingrese el correo del usuario a suspender:");
         if (correo != null && !correo.trim().isEmpty()) {
-            logica.Controlador controlador = new logica.Controlador();
             controlador.suspenderUsuario(correo);
         }
     }
@@ -421,7 +431,6 @@ public class Principal extends JFrame {
         if (tipo == null) return; // canceló
 
         try {
-            logica.Controlador controlador = new logica.Controlador();
             datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
 
             if ("Libro".equals(tipo)) {
@@ -460,6 +469,39 @@ public class Principal extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                 "Error al registrar material: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    // Método para manejar el registro de préstamo
+    private void registrarPrestamo() {
+        String correoUsuario = JOptionPane.showInputDialog(this, "Correo del lector:");
+        if (correoUsuario == null || correoUsuario.trim().isEmpty()) return;
+
+        String correoBibliotecario = JOptionPane.showInputDialog(this, "Correo del bibliotecario:");
+        if (correoBibliotecario == null || correoBibliotecario.trim().isEmpty()) return;
+
+        String materialIdStr = JOptionPane.showInputDialog(this, "ID del material:");
+        if (materialIdStr == null || materialIdStr.trim().isEmpty()) return;
+
+        try {
+            int materialId = Integer.parseInt(materialIdStr);
+            controlador.agregarPrestamo(correoUsuario, correoBibliotecario, materialId);
+
+            JOptionPane.showMessageDialog(this,
+                "Préstamo registrado exitosamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error: El ID de material debe ser numérico",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error al registrar préstamo: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();

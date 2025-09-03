@@ -6,6 +6,7 @@ import datatypes.DtFecha;
 import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
+import datatypes.DtFecha;
 
 public class ManejadorUsuario {
     
@@ -23,30 +24,26 @@ public class ManejadorUsuario {
         return instancia;
     }
 
-    public void agregarUsuario(String nombre, String correo, String tipo) {
-        em.getTransaction().begin();
-        
-        Usuario usuario = UsuarioFactory.crearUsuario(tipo, nombre, correo);
-        
-        if (usuario == null) {
-            em.getTransaction().rollback();
-            throw new IllegalArgumentException("Tipo de usuario inválido. Solo 'lector' o 'bibliotecario'.");
-        }
-        em.persist(usuario);
-        
-        em.getTransaction().commit();
-    }
-
     public void agregarLector(DtLector dtLector) {
         em.getTransaction().begin();
-        Usuario lector = UsuarioFactory.crearLector(dtLector.getNombre(), dtLector.getCorreo(), dtLector.getFechaRegistro(), dtLector.getDireccion(), dtLector.getActivo(), dtLector.getRedBiblioteca());
+        Lector lector = new Lector(
+            dtLector.getNombre(),
+            dtLector.getCorreo(),
+            dtLector.getDireccion(),
+            dtLector.getFechaRegistro(),
+            dtLector.getActivo(),
+            dtLector.getRedBiblioteca()
+        );
         em.persist(lector);
         em.getTransaction().commit();
     }
 
     public void agregarBibliotecario(DtBibliotecario dtBibliotecario) {
         em.getTransaction().begin();
-        Usuario bibliotecario = UsuarioFactory.crearBibliotecario(dtBibliotecario.getNombre(), dtBibliotecario.getCorreo());
+        Bibliotecario bibliotecario = new Bibliotecario(
+            dtBibliotecario.getNombre(),
+            dtBibliotecario.getCorreo()
+        );
         em.persist(bibliotecario);
         em.getTransaction().commit();
     }
@@ -55,6 +52,8 @@ public class ManejadorUsuario {
         Usuario usuario = em.find(Usuario.class, correo);
         return usuario != null;
     }
+
+
     public void suspenderUsuario(String correo) {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
@@ -70,5 +69,12 @@ public class ManejadorUsuario {
         EntityManager em = conexion.getEntityManager();
         return em.find(Usuario.class, correo);
     }
-}
 
+    public Lector buscarLector(String correo) {
+        return em.find(Lector.class, correo);
+    }
+
+    public Bibliotecario buscarBibliotecario(String correo) {
+        return em.find(Bibliotecario.class, correo);
+    }
+}

@@ -2,13 +2,15 @@ package logica;
 
 import interfaces.IControlador;
 import excepciones.UsuarioRepetidoException;
-import datatypes.DtFecha;
-import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
 import javax.swing.JOptionPane;
 import datatypes.DtLibro;
+import datatypes.DtPrestamo;
 import datatypes.DtArticulo;
+import persistencia.Conexion;
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
 
 public class Controlador implements IControlador {
     
@@ -20,7 +22,7 @@ public class Controlador implements IControlador {
         this.manejadorMaterial = ManejadorMaterial.getInstancia();
     }
 
-    // Métodos específicos requeridos por la UI
+    // Métodos específicos requeridos por la UI (usuarios)
     public void agregarLector(DtLector dtLector) throws UsuarioRepetidoException {
         if (manejadorUsuario.existeUsuario(dtLector.getCorreo())) {
             throw new UsuarioRepetidoException("Ya existe un usuario con el correo: " + dtLector.getCorreo());
@@ -28,8 +30,7 @@ public class Controlador implements IControlador {
         manejadorUsuario.agregarLector(dtLector);
     }
 
-    public void agregarBibliotecario(DtBibliotecario dtBibliotecario)
-            throws UsuarioRepetidoException {
+    public void agregarBibliotecario(DtBibliotecario dtBibliotecario) throws UsuarioRepetidoException {
         if (manejadorUsuario.existeUsuario(dtBibliotecario.getCorreo())) {
             throw new UsuarioRepetidoException("Ya existe un usuario con el correo: " + dtBibliotecario.getCorreo());
         }
@@ -61,6 +62,42 @@ public class Controlador implements IControlador {
 
     public void agregarArticulo(DtArticulo dtArticulo) {
         manejadorMaterial.agregarArticulo(dtArticulo);
+    }
+
+    public void agregarPrestamo (String usuarioCorreo, String bibliotecarioCorreo, int materialId){
+        ManejadorUsuario mUsuario = ManejadorUsuario.getInstancia();
+        ManejadorMaterial mMat = ManejadorMaterial.getInstancia();
+
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+
+        Lector lector = mUsuario.buscarLector(usuarioCorreo);
+        if (lector == null) {
+            throw new IllegalArgumentException("Lector no encontrado: " + usuarioCorreo);
+        }
+
+        Bibliotecario bibliotecario = mUsuario.buscarBibliotecario(bibliotecarioCorreo);
+        if (bibliotecario == null) {
+            throw new IllegalArgumentException("Bibliotecario no encontrado: " + bibliotecarioCorreo);
+        }
+
+        Material material = mMat.buscarMaterial(Long.valueOf(materialId));
+        if (material == null) {
+            throw new IllegalArgumentException("Material no encontrado: id=" + materialId);
+        }
+
+        LocalDate hoy = LocalDate.now();
+        LocalDate fin = hoy.plusDays(14);
+        datatypes.DtFecha fechaInicio = new datatypes.DtFecha(hoy.getDayOfMonth(), hoy.getMonthValue(), hoy.getYear());
+        datatypes.DtFecha fechaFin = new datatypes.DtFecha(fin.getDayOfMonth(), fin.getMonthValue(), fin.getYear());
+
+        em.getTransaction().begin();
+        Prestamo prestamo = new Prestamo(material, lector, bibliotecario, fechaInicio, fechaFin);
+        // Mantener relaciones bidireccionales
+        lector.addPrestamo(prestamo);
+        bibliotecario.addPrestamo(prestamo);
+        material.addPrestamo(prestamo);
+        em.persist(prestamo);
+        em.getTransaction().commit();
     }
 }
 

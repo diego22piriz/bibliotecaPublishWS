@@ -69,6 +69,7 @@
                 <version>3.1.0</version>
                 <configuration>
                     <mainClass>presentacion.Principal</mainClass>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
                 </configuration>
             </plugin>
         </plugins>

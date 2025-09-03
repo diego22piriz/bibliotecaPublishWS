@@ -3,6 +3,8 @@ package logica;
 import datatypes.RedBiblioteca;
 import datatypes.DtFecha;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "lectores")
@@ -27,6 +29,9 @@ public class Lector extends Usuario {
     @Enumerated(EnumType.STRING)
     @Column(name = "red_biblioteca", nullable = false)
     private RedBiblioteca redBiblioteca;
+
+    @OneToMany(mappedBy = "lector", cascade = CascadeType.ALL)
+    private List<Prestamo> prestamos = new ArrayList<>();
 
     // Constructor por defecto
     public Lector() {
@@ -59,6 +64,10 @@ public class Lector extends Usuario {
         return this.redBiblioteca;
     }
 
+    public List<Prestamo> getPrestamos() {
+        return this.prestamos;
+    }
+
     // Setters
     public void setDireccion(String direccion) {
         this.direccion = direccion;
@@ -79,5 +88,15 @@ public class Lector extends Usuario {
     @Override
     public String tipoUsuario() {
         return "Lector";
+    }
+    
+    public void addPrestamo(Prestamo prestamo) {
+        this.prestamos.add(prestamo);
+        prestamo.setLector(this);
+    }
+
+    public void removePrestamo(Prestamo prestamo) {
+        this.prestamos.remove(prestamo);
+        prestamo.setLector(null);
     }
 }
