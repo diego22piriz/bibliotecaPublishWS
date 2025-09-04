@@ -48,7 +48,7 @@ public class Principal extends JFrame {
         
         // Inicializar controlador global
         controlador = Fabrica.getInstancia().getIControlador();
-
+        
         // Crear barra de menú superior
         JPanel menuBar = createMenuBar();
         contentPane.add(menuBar, BorderLayout.NORTH);
