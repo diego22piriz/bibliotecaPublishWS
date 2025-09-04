@@ -10,6 +10,7 @@ import datatypes.DtPrestamo;
 import datatypes.DtArticulo;
 import persistencia.Conexion;
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class Controlador implements IControlador {
     
@@ -108,6 +109,19 @@ public class Controlador implements IControlador {
         material.addPrestamo(prestamo);
         em.persist(prestamo);
         em.getTransaction().commit();
+    }
+    
+    // Métodos para obtener listas de datos
+    public List<String> listarLectores() {
+        return manejadorUsuario.listarLectores();
+    }
+    
+    public List<String> listarBibliotecarios() {
+        return manejadorUsuario.listarBibliotecarios();
+    }
+    
+    public List<String> listarMateriales() {
+        return manejadorMaterial.listarMateriales();
     }
 }
 

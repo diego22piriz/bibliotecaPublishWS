@@ -6,6 +6,7 @@ import datatypes.DtLibro;
 import datatypes.DtArticulo;
 import datatypes.DtPrestamo;
 import excepciones.UsuarioRepetidoException;
+import java.util.List;
 
 public interface IControlador {
     
@@ -22,4 +23,9 @@ public interface IControlador {
     void suspenderUsuario(String correo);
 
     void cambiarZona(String correo, String zona);
+    
+    // Métodos para obtener listas de datos
+    List<String> listarLectores();
+    List<String> listarBibliotecarios();
+    List<String> listarMateriales();
 }

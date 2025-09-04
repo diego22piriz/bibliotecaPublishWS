@@ -1,12 +1,12 @@
 // ProgApProy/src/main/java/logica/ManejadorMaterial.java
 package logica;
 
-import datatypes.DtMaterial;
 import datatypes.DtLibro;
 import datatypes.DtArticulo;
 import persistencia.Conexion;
 import javax.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
 
 public class ManejadorMaterial {
     
@@ -57,19 +57,27 @@ public class ManejadorMaterial {
     }
     
     // Listar todos los materiales
-    public List<Material> listarMateriales() {
-        Query query = em.createQuery("SELECT m FROM Material m");
-        return query.getResultList();
+    @SuppressWarnings("unchecked")
+    public List<String> listarMateriales() {
+        javax.persistence.Query query = em.createQuery("SELECT m FROM Material m");
+        List<Material> materiales = query.getResultList();
+        List<String> ids = new ArrayList<>();
+        for (Material material : materiales) {
+            ids.add(material.getId().toString());
+        }
+        return ids;
     }
     
     // Listar por tipo específico
+    @SuppressWarnings("unchecked")
     public List<Libro> listarLibros() {
-        Query query = em.createQuery("SELECT l FROM Libro l");
+        javax.persistence.Query query = em.createQuery("SELECT l FROM Libro l");
         return query.getResultList();
     }
     
+    @SuppressWarnings("unchecked")
     public List<Articulo> listarArticulos() {
-        Query query = em.createQuery("SELECT a FROM Articulo a");
+        javax.persistence.Query query = em.createQuery("SELECT a FROM Articulo a");
         return query.getResultList();
     }
     

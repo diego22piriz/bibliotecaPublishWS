@@ -8,6 +8,7 @@ import interfaces.IControlador;
 import datatypes.DtPrestamo;
 import datatypes.DtFecha;
 import datatypes.EstadoPrestamo;
+import java.util.List;
 
 public class RegistrarPrestamo extends JPanel {
     
@@ -45,17 +46,20 @@ public class RegistrarPrestamo extends JPanel {
         // Campo Correo del Lector
         JLabel lblCorreoLector = new JLabel("Correo del Lector:");
         lblCorreoLector.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtCorreoLector = new JTextField(20);
+        JComboBox<String> cmbCorreoLector = new JComboBox<>();
+        cargarCorreosLectores(cmbCorreoLector);
         
         // Campo Correo del Bibliotecario
         JLabel lblCorreoBiblio = new JLabel("Correo del Bibliotecario:");
         lblCorreoBiblio.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtCorreoBiblio = new JTextField(20);
+        JComboBox<String> cmbCorreoBiblio = new JComboBox<>();
+        cargarCorreosBibliotecarios(cmbCorreoBiblio);
         
         // Campo ID del Material
         JLabel lblMaterialId = new JLabel("ID del Material:");
         lblMaterialId.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtMaterialId = new JTextField(10);
+        JComboBox<String> cmbMaterialId = new JComboBox<>();
+        cargarIdsMateriales(cmbMaterialId);
         
         // Campo Fecha de Solicitud
         JLabel lblFechaSolicitud = new JLabel("Fecha de Solicitud:");
@@ -94,11 +98,11 @@ public class RegistrarPrestamo extends JPanel {
         
         // Agregar campos al panel
         camposPanel.add(lblCorreoLector);
-        camposPanel.add(txtCorreoLector);
+        camposPanel.add(cmbCorreoLector);
         camposPanel.add(lblCorreoBiblio);
-        camposPanel.add(txtCorreoBiblio);
+        camposPanel.add(cmbCorreoBiblio);
         camposPanel.add(lblMaterialId);
-        camposPanel.add(txtMaterialId);
+        camposPanel.add(cmbMaterialId);
         camposPanel.add(lblFechaSolicitud);
         camposPanel.add(fechaSolicitudPanel);
         camposPanel.add(lblFechaDevolucion);
@@ -115,7 +119,19 @@ public class RegistrarPrestamo extends JPanel {
         JButton btnRegistrar = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                registrarPrestamo(txtCorreoLector.getText(), txtCorreoBiblio.getText(), txtMaterialId.getText(),
+                String correoLector = (String)cmbCorreoLector.getSelectedItem();
+                String correoBibliotecario = (String)cmbCorreoBiblio.getSelectedItem();
+                String idMaterial = (String)cmbMaterialId.getSelectedItem();
+                
+                if (correoLector == null || correoBibliotecario == null || idMaterial == null) {
+                    JOptionPane.showMessageDialog(RegistrarPrestamo.this, 
+                        "Debe seleccionar un lector, bibliotecario y material", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                registrarPrestamo(correoLector, correoBibliotecario, 
+                    idMaterial,
                     txtDiaSolicitud.getText(), txtMesSolicitud.getText(), txtAnioSolicitud.getText(),
                     txtDiaDevolucion.getText(), txtMesDevolucion.getText(), txtAnioDevolucion.getText(),
                     (EstadoPrestamo)cmbEstado.getSelectedItem());
@@ -236,5 +252,48 @@ public class RegistrarPrestamo extends JPanel {
         panelCentral.add(new PanelRegistros(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
+    }
+    
+    // Métodos para cargar datos en los ComboBox
+    private void cargarCorreosLectores(JComboBox<String> comboBox) {
+        try {
+            List<String> correos = controlador.listarLectores();
+            comboBox.removeAllItems();
+            
+            for (String correo : correos) {
+                comboBox.addItem(correo);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar lectores: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarCorreosBibliotecarios(JComboBox<String> comboBox) {
+        try {
+            List<String> correos = controlador.listarBibliotecarios();
+            comboBox.removeAllItems();
+            
+            for (String correo : correos) {
+                comboBox.addItem(correo);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar bibliotecarios: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarIdsMateriales(JComboBox<String> comboBox) {
+        try {
+            List<String> ids = controlador.listarMateriales();
+            comboBox.removeAllItems();
+            
+            for (String id : ids) {
+                comboBox.addItem(id);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar materiales: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
