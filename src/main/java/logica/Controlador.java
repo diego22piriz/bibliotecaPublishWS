@@ -2,6 +2,7 @@ package logica;
 
 import interfaces.IControlador;
 import excepciones.UsuarioRepetidoException;
+import excepciones.PrestamoDuplicadoException;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
 import javax.swing.JOptionPane;
@@ -79,7 +80,7 @@ public class Controlador implements IControlador {
         manejadorMaterial.agregarArticulo(dtArticulo);
     }
 
-    public void agregarPrestamo(DtPrestamo dtPrestamo) {
+    public void agregarPrestamo(DtPrestamo dtPrestamo) throws PrestamoDuplicadoException {
         ManejadorUsuario mUsuario = ManejadorUsuario.getInstancia();
         ManejadorMaterial mMat = ManejadorMaterial.getInstancia();
 
@@ -100,15 +101,32 @@ public class Controlador implements IControlador {
             throw new IllegalArgumentException("Material no encontrado: id=" + dtPrestamo.getMaterialId());
         }
 
+        // Verificar si ya existe un préstamo con la misma combinación
+        javax.persistence.Query query = em.createQuery(
+            "SELECT p FROM Prestamo p WHERE p.material.id = :materialId AND p.lector.correo = :lectorCorreo AND p.bibliotecario.correo = :bibliotecarioCorreo"
+        );
+        query.setParameter("materialId", dtPrestamo.getMaterialId());
+        query.setParameter("lectorCorreo", dtPrestamo.getLectorCorreo());
+        query.setParameter("bibliotecarioCorreo", dtPrestamo.getBibliotecarioCorreo());
+        
+        if (!query.getResultList().isEmpty()) {
+            throw new PrestamoDuplicadoException("Ya existe un préstamo para este material, lector y bibliotecario");
+        }
+
         em.getTransaction().begin();
-        Prestamo prestamo = new Prestamo(material, lector, bibliotecario, dtPrestamo.getFechaSolicitud(), dtPrestamo.getFechaDevolucion());
-        prestamo.setEstado(dtPrestamo.getEstado());
-        // Mantener relaciones bidireccionales
-        lector.addPrestamo(prestamo);
-        bibliotecario.addPrestamo(prestamo);
-        material.addPrestamo(prestamo);
-        em.persist(prestamo);
-        em.getTransaction().commit();
+        try {
+            Prestamo prestamo = new Prestamo(material, lector, bibliotecario, dtPrestamo.getFechaSolicitud(), dtPrestamo.getFechaDevolucion());
+            prestamo.setEstado(dtPrestamo.getEstado());
+            // Mantener relaciones bidireccionales
+            lector.addPrestamo(prestamo);
+            bibliotecario.addPrestamo(prestamo);
+            material.addPrestamo(prestamo);
+            em.persist(prestamo);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException("Error al registrar préstamo: " + e.getMessage(), e);
+        }
     }
     
     // Métodos para obtener listas de datos

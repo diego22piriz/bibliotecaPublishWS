@@ -8,6 +8,7 @@ import interfaces.IControlador;
 import datatypes.DtPrestamo;
 import datatypes.DtFecha;
 import datatypes.EstadoPrestamo;
+import excepciones.PrestamoDuplicadoException;
 import java.util.List;
 
 public class RegistrarPrestamo extends JPanel {
@@ -238,9 +239,24 @@ public class RegistrarPrestamo extends JPanel {
                 "Error: Los valores de fecha y ID de material deben ser números válidos",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+        } catch (PrestamoDuplicadoException ex) {
+            JOptionPane.showMessageDialog(this,
+                ex.getMessage(),
+                "Préstamo Duplicado",
+                JOptionPane.WARNING_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this,
+                ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this,
+                ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Error al registrar préstamo: " + ex.getMessage(),
+                "Error inesperado al registrar préstamo: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();

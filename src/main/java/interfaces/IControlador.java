@@ -6,6 +6,7 @@ import datatypes.DtLibro;
 import datatypes.DtArticulo;
 import datatypes.DtPrestamo;
 import excepciones.UsuarioRepetidoException;
+import excepciones.PrestamoDuplicadoException;
 import java.util.List;
 
 public interface IControlador {
@@ -19,7 +20,7 @@ public interface IControlador {
     void agregarArticulo(DtArticulo dtArticulo);
 
     // Métodos para préstamos
-    void agregarPrestamo(DtPrestamo dtPrestamo);
+    void agregarPrestamo(DtPrestamo dtPrestamo) throws PrestamoDuplicadoException;
     void suspenderUsuario(String correo);
 
     void cambiarZona(String correo, String zona);
