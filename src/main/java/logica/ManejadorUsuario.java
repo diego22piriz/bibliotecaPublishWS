@@ -79,8 +79,12 @@ public class ManejadorUsuario {
     }
 
     public void cambiarZona(String correo, String zona){
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        em.getTransaction().begin();
         Usuario usr = em.find(Usuario.class, correo);
         RedBiblioteca bib = RedBiblioteca.valueOf(zona);
         ((Lector)usr).setRedBiblioteca(bib);
+        em.getTransaction().commit();
     }
 }

@@ -21,56 +21,79 @@ public class CambiarZona extends JPanel{
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         // Título
-        JLabel tituloLabel = new JLabel("Gestión de Usuarios", SwingConstants.CENTER);
+        JLabel tituloLabel = new JLabel("Cambiar Zona", SwingConstants.CENTER);
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 24));
         tituloLabel.setForeground(new Color(44, 62, 80));
         tituloLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
         add(tituloLabel, BorderLayout.NORTH);
-        // Panel central
-        JPanel panelCentral = new JPanel();
-        panelCentral.setLayout(new BorderLayout());
-        panelCentral.setBackground(Color.WHITE);
-        add(panelCentral, BorderLayout.CENTER);
-       
+        // Panel central con formulario
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        
         // Panel para campos básicos
         JPanel camposBasicos = new JPanel();
-        camposBasicos.setLayout(new GridLayout(0, 2, 10, 10));
+        camposBasicos.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         camposBasicos.setBackground(Color.WHITE);
 
-
         // Campo Correo
-        JLabel lblCorreo = new JLabel("Correo:");
+        JLabel lblCorreo = new JLabel("Correo del Usuario:");
         lblCorreo.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtCorreo = new JTextField(10);
+        JTextField txtCorreo = new JTextField(15);
+        txtCorreo.setPreferredSize(new Dimension(200, 25));
 
-        // Campo Correo
-        JLabel lblZona = new JLabel("nNeva zona:");
+        // Campo Zona
+        JLabel lblZona = new JLabel("Nueva Zona:");
         lblZona.setFont(new Font("Arial", Font.BOLD, 12));
         String[] zonas = {"BIBLIOTECA_CENTRAL", "SUCURSAL_ESTE", "SUCURSAL_OESTE", "BIBLIOTECA_INFANTIL", "ARCHIVO_GENERAL"};
         JComboBox<String> cmbZona = new JComboBox<>(zonas);
+        cmbZona.setPreferredSize(new Dimension(200, 25));
 
         camposBasicos.add(lblCorreo);
         camposBasicos.add(txtCorreo);
+        camposBasicos.add(Box.createVerticalStrut(10));
+        camposBasicos.add(lblZona);
         camposBasicos.add(cmbZona);
 
-
-
-        // Agregar componentes al panelCentral
-        panelCentral.add(camposBasicos);
+        formPanel.add(camposBasicos);
+        add(formPanel, BorderLayout.CENTER);
 
 
         // Panel de botones
-        JPanel botonesPanel = new JPanel();
-        botonesPanel.setLayout(new GridLayout(2, 2, 20, 20));
-        botonesPanel.setBackground(Color.WHITE);
-        add(botonesPanel, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        
         // Botones
-        JButton btnCambiarZona = new JButton("Cambiar zona");
+        JButton btnCambiarZona = new JButton("Cambiar Zona");
+        btnCambiarZona.setBackground(new Color(52, 152, 219));
+        btnCambiarZona.setForeground(Color.WHITE);
+        btnCambiarZona.setFont(new Font("Arial", Font.BOLD, 12));
+        btnCambiarZona.setPreferredSize(new Dimension(120, 35));
         btnCambiarZona.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 controlador.cambiarZona(txtCorreo.getText(), (String)cmbZona.getSelectedItem());
             }
         });
-        botonesPanel.add(btnCambiarZona);
+        
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBackground(new Color(149, 165, 166));
+        btnVolver.setForeground(Color.WHITE);
+        btnVolver.setFont(new Font("Arial", Font.BOLD, 12));
+        btnVolver.setPreferredSize(new Dimension(100, 35));
+        btnVolver.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                panelCentral.removeAll();
+                panelCentral.add(new GestionarUsuario(controlador, panelCentral));
+                panelCentral.revalidate();
+                panelCentral.repaint();
+            }
+        });
+        
+        buttonPanel.add(btnCambiarZona);
+        buttonPanel.add(btnVolver);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 }
