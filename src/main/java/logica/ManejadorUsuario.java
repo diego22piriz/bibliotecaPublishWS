@@ -77,4 +77,10 @@ public class ManejadorUsuario {
     public Bibliotecario buscarBibliotecario(String correo) {
         return em.find(Bibliotecario.class, correo);
     }
+
+    public void cambiarZona(String correo, String zona){
+        Usuario usr = em.find(Usuario.class, correo);
+        RedBiblioteca bib = RedBiblioteca.valueOf(zona);
+        ((Lector)usr).setRedBiblioteca(bib);
+    }
 }

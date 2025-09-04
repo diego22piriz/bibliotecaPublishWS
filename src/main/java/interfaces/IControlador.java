@@ -20,4 +20,6 @@ public interface IControlador {
     void agregarPrestamo(String usuarioCorreo, String bibliotecarioCorreo, int materialId);
 
     void suspenderUsuario(String correo);
+
+    void cambiarZona(String correo, String zona);
 }

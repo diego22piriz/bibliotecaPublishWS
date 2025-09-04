@@ -52,6 +52,21 @@ public class Controlador implements IControlador {
         }
     }
 
+    public void cambiarZona(String correo, String zona){
+        if (manejadorUsuario.existeUsuario(correo)) {
+            if (manejadorUsuario.getUsuario(correo).tipoUsuario().equals("Lector")) {
+                manejadorUsuario.cambiarZona(correo, zona);
+                JOptionPane.showMessageDialog(null, "Zona cambiada correctamente.");
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Usuario no es un lector.");
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Usuario no existe.");
+        }
+    }
+
         
        
        

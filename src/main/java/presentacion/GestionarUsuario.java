@@ -87,7 +87,7 @@ public class GestionarUsuario extends JPanel{
     
     private void mostrarCambiarZona() {
         panelCentral.removeAll();
-        panelCentral.add(new RegistrarMaterial(controlador, panelCentral));
+        panelCentral.add(new CambiarZona(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
     }
