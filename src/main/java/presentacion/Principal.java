@@ -13,7 +13,7 @@ public class Principal extends JFrame {
     private JButton btnInicio;
     private JButton btnRegistros;
     private JButton btnConsultas;
-    private JButton btnGestionarUsuarios;
+    private JButton btnGestiones;
     private JPanel panelCentral;
     private IControlador controlador;
     
@@ -66,7 +66,7 @@ public class Principal extends JFrame {
     
     private JPanel createMenuBar() {
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        menuPanel.setLayout(new GridLayout(1, 4, 0, 0));
         menuPanel.setBackground(new Color(70, 130, 180)); // Azul acero
         menuPanel.setPreferredSize(new Dimension(800, 60));
         
@@ -94,17 +94,17 @@ public class Principal extends JFrame {
             }
         });
 
-        btnGestionarUsuarios = createMenuButton("Gestionar Usr", new Color(155, 89, 182));
-        btnGestionarUsuarios.addActionListener(new ActionListener() {
+        btnGestiones = createMenuButton("Gestiones", new Color(231, 76, 60));
+        btnGestiones.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mostrarGestionarUsuarios();
+                mostrarGestiones();
             }
         });
         
         menuPanel.add(btnInicio);
         menuPanel.add(btnRegistros);
         menuPanel.add(btnConsultas);
-       menuPanel.add(btnGestionarUsuarios);
+        menuPanel.add(btnGestiones);
         
         return menuPanel;
     }
@@ -153,9 +153,9 @@ public class Principal extends JFrame {
         panelCentral.repaint();
     }
     
-     private void mostrarGestionarUsuarios() {
+    private void mostrarGestiones() {
         panelCentral.removeAll();
-        panelCentral.add(new GestionarUsuario(controlador, panelCentral));
+        panelCentral.add(new Gestionar(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
     }
