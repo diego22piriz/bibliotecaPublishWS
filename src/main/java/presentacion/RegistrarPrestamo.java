@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import interfaces.IControlador;
+import datatypes.DtPrestamo;
+import datatypes.DtFecha;
+import datatypes.EstadoPrestamo;
 
 public class RegistrarPrestamo extends JPanel {
     
@@ -54,6 +57,41 @@ public class RegistrarPrestamo extends JPanel {
         lblMaterialId.setFont(new Font("Arial", Font.BOLD, 12));
         JTextField txtMaterialId = new JTextField(10);
         
+        // Campo Fecha de Solicitud
+        JLabel lblFechaSolicitud = new JLabel("Fecha de Solicitud:");
+        lblFechaSolicitud.setFont(new Font("Arial", Font.BOLD, 12));
+        JPanel fechaSolicitudPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fechaSolicitudPanel.setBackground(Color.WHITE);
+        JTextField txtDiaSolicitud = new JTextField(3);
+        JTextField txtMesSolicitud = new JTextField(3);
+        JTextField txtAnioSolicitud = new JTextField(5);
+        fechaSolicitudPanel.add(new JLabel("Día:"));
+        fechaSolicitudPanel.add(txtDiaSolicitud);
+        fechaSolicitudPanel.add(new JLabel("Mes:"));
+        fechaSolicitudPanel.add(txtMesSolicitud);
+        fechaSolicitudPanel.add(new JLabel("Año:"));
+        fechaSolicitudPanel.add(txtAnioSolicitud);
+        
+        // Campo Fecha de Devolución
+        JLabel lblFechaDevolucion = new JLabel("Fecha de Devolución:");
+        lblFechaDevolucion.setFont(new Font("Arial", Font.BOLD, 12));
+        JPanel fechaDevolucionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fechaDevolucionPanel.setBackground(Color.WHITE);
+        JTextField txtDiaDevolucion = new JTextField(3);
+        JTextField txtMesDevolucion = new JTextField(3);
+        JTextField txtAnioDevolucion = new JTextField(5);
+        fechaDevolucionPanel.add(new JLabel("Día:"));
+        fechaDevolucionPanel.add(txtDiaDevolucion);
+        fechaDevolucionPanel.add(new JLabel("Mes:"));
+        fechaDevolucionPanel.add(txtMesDevolucion);
+        fechaDevolucionPanel.add(new JLabel("Año:"));
+        fechaDevolucionPanel.add(txtAnioDevolucion);
+        
+        // Campo Estado
+        JLabel lblEstado = new JLabel("Estado:");
+        lblEstado.setFont(new Font("Arial", Font.BOLD, 12));
+        JComboBox<EstadoPrestamo> cmbEstado = new JComboBox<>(EstadoPrestamo.values());
+        
         // Agregar campos al panel
         camposPanel.add(lblCorreoLector);
         camposPanel.add(txtCorreoLector);
@@ -61,6 +99,12 @@ public class RegistrarPrestamo extends JPanel {
         camposPanel.add(txtCorreoBiblio);
         camposPanel.add(lblMaterialId);
         camposPanel.add(txtMaterialId);
+        camposPanel.add(lblFechaSolicitud);
+        camposPanel.add(fechaSolicitudPanel);
+        camposPanel.add(lblFechaDevolucion);
+        camposPanel.add(fechaDevolucionPanel);
+        camposPanel.add(lblEstado);
+        camposPanel.add(cmbEstado);
         
         // Panel de botones
         JPanel buttonPanel = new JPanel();
@@ -71,7 +115,10 @@ public class RegistrarPrestamo extends JPanel {
         JButton btnRegistrar = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                registrarPrestamo(txtCorreoLector.getText(), txtCorreoBiblio.getText(), txtMaterialId.getText());
+                registrarPrestamo(txtCorreoLector.getText(), txtCorreoBiblio.getText(), txtMaterialId.getText(),
+                    txtDiaSolicitud.getText(), txtMesSolicitud.getText(), txtAnioSolicitud.getText(),
+                    txtDiaDevolucion.getText(), txtMesDevolucion.getText(), txtAnioDevolucion.getText(),
+                    (EstadoPrestamo)cmbEstado.getSelectedItem());
             }
         });
         
@@ -116,7 +163,11 @@ public class RegistrarPrestamo extends JPanel {
     }
     
     // Método para manejar el registro de préstamo
-    private void registrarPrestamo(String correoUsuario, String correoBibliotecario, String materialIdStr) {
+    private void registrarPrestamo(String correoUsuario, String correoBibliotecario, String materialIdStr, 
+                                  String diaSolicitudStr, String mesSolicitudStr, String anioSolicitudStr,
+                                  String diaDevolucionStr, String mesDevolucionStr, String anioDevolucionStr,
+                                  EstadoPrestamo estado) {
+        // Validaciones
         if (correoUsuario == null || correoUsuario.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El correo del lector es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -129,10 +180,38 @@ public class RegistrarPrestamo extends JPanel {
             JOptionPane.showMessageDialog(this, "El ID del material es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (diaSolicitudStr == null || diaSolicitudStr.trim().isEmpty() ||
+            mesSolicitudStr == null || mesSolicitudStr.trim().isEmpty() ||
+            anioSolicitudStr == null || anioSolicitudStr.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La fecha de solicitud es obligatoria", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (diaDevolucionStr == null || diaDevolucionStr.trim().isEmpty() ||
+            mesDevolucionStr == null || mesDevolucionStr.trim().isEmpty() ||
+            anioDevolucionStr == null || anioDevolucionStr.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La fecha de devolución es obligatoria", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         try {
-            int materialId = Integer.parseInt(materialIdStr);
-            controlador.agregarPrestamo(correoUsuario, correoBibliotecario, materialId);
+            Long materialId = Long.parseLong(materialIdStr);
+            
+            // Parsear fechas
+            int diaSolicitud = Integer.parseInt(diaSolicitudStr);
+            int mesSolicitud = Integer.parseInt(mesSolicitudStr);
+            int anioSolicitud = Integer.parseInt(anioSolicitudStr);
+            DtFecha fechaSolicitud = new DtFecha(diaSolicitud, mesSolicitud, anioSolicitud);
+            
+            int diaDevolucion = Integer.parseInt(diaDevolucionStr);
+            int mesDevolucion = Integer.parseInt(mesDevolucionStr);
+            int anioDevolucion = Integer.parseInt(anioDevolucionStr);
+            DtFecha fechaDevolucion = new DtFecha(diaDevolucion, mesDevolucion, anioDevolucion);
+            
+            // Crear DtPrestamo
+            DtPrestamo dtPrestamo = new DtPrestamo(correoUsuario, correoBibliotecario, materialId, 
+                                                  fechaSolicitud, fechaDevolucion, estado);
+            
+            controlador.agregarPrestamo(dtPrestamo);
 
             JOptionPane.showMessageDialog(this,
                 "Préstamo registrado exitosamente",
@@ -140,7 +219,7 @@ public class RegistrarPrestamo extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error: El ID de material debe ser numérico",
+                "Error: Los valores de fecha y ID de material deben ser números válidos",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
