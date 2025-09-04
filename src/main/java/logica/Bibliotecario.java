@@ -1,6 +1,8 @@
 package logica;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "bibliotecarios")
@@ -20,6 +22,23 @@ public class Bibliotecario extends Usuario {
         super(nombre, correo);
     }
 
+    @OneToMany(mappedBy = "bibliotecario", cascade = CascadeType.ALL)
+    private List<Prestamo> prestamos = new ArrayList<>();
+
+    public List<Prestamo> getPrestamos() {
+        return this.prestamos;
+    }
+
+    public void addPrestamo(Prestamo prestamo) {
+        this.prestamos.add(prestamo);
+        prestamo.setBibliotecario(this);
+    }
+
+    public void removePrestamo(Prestamo prestamo) {
+        this.prestamos.remove(prestamo);
+        prestamo.setBibliotecario(null);
+    }
+
     public Integer getNumeroEmpleado() { 
         return numeroEmpleado; 
     }
@@ -27,4 +46,9 @@ public class Bibliotecario extends Usuario {
     public void setNumeroEmpleado(Integer numeroEmpleado) { 
         this.numeroEmpleado = numeroEmpleado; 
     }
-}
+    
+    @Override
+    public String tipoUsuario() {
+        return "Bibliotecario";
+    }
+}   

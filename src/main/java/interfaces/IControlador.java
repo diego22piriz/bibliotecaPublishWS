@@ -4,6 +4,7 @@ import datatypes.DtLector;
 import datatypes.DtBibliotecario;
 import datatypes.DtLibro;
 import datatypes.DtArticulo;
+import datatypes.DtPrestamo;
 import excepciones.UsuarioRepetidoException;
 
 public interface IControlador {
@@ -15,4 +16,8 @@ public interface IControlador {
     // Métodos para materiales
     void agregarLibro(DtLibro dtLibro);
     void agregarArticulo(DtArticulo dtArticulo);
+
+    // Métodos para préstamos
+    void agregarPrestamo(DtPrestamo dtPrestamo);
+    void suspenderUsuario(String correo);
 }
