@@ -270,7 +270,7 @@ public class RegistrarMaterial extends JPanel {
     
     private void volver() {
         panelCentral.removeAll();
-        panelCentral.add(new PanelRegistros(controlador, panelCentral));
+        panelCentral.add(new Inicio());
         panelCentral.revalidate();
         panelCentral.repaint();
     }

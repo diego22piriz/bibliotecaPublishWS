@@ -34,7 +34,7 @@ public class GestionarUsuario extends JPanel {
         mainButtonPanel.setBackground(Color.WHITE);
         
         // Botón Suspender Usuario
-        JButton btnSuspenderUsuario = createActionButton("Suspender Usuario", new Color(46, 204, 113));
+        JButton btnSuspenderUsuario = createActionButton("Suspender Lector", new Color(46, 204, 113));
         btnSuspenderUsuario.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mostrarSuspenderUsuario();
@@ -145,7 +145,7 @@ public class GestionarUsuario extends JPanel {
     
     private void volver() {
         panelCentral.removeAll();
-        panelCentral.add(new Gestionar(controlador, panelCentral));
+        panelCentral.add(new Inicio());
         panelCentral.revalidate();
         panelCentral.repaint();
     }
