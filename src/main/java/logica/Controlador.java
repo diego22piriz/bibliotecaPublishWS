@@ -12,6 +12,7 @@ import datatypes.DtArticulo;
 import persistencia.Conexion;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.ArrayList;
 
 public class Controlador implements IControlador {
     
@@ -138,7 +139,7 @@ public class Controlador implements IControlador {
         return manejadorUsuario.listarBibliotecarios();
     }
     
-    public List<String> listarMateriales() {
+    public ArrayList<String> listarMateriales() {
         return manejadorMaterial.listarMateriales();
     }
 }

@@ -8,6 +8,7 @@ import datatypes.DtPrestamo;
 import excepciones.UsuarioRepetidoException;
 import excepciones.PrestamoDuplicadoException;
 import java.util.List;
+import java.util.ArrayList;
 
 public interface IControlador {
     
@@ -28,5 +29,5 @@ public interface IControlador {
     // Métodos para obtener listas de datos
     List<String> listarLectores();
     List<String> listarBibliotecarios();
-    List<String> listarMateriales();
+    ArrayList<String> listarMateriales();
 }
