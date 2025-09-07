@@ -8,6 +8,8 @@ import interfaces.IControlador;
 import datatypes.DtPrestamo;
 import datatypes.DtFecha;
 import datatypes.EstadoPrestamo;
+import excepciones.PrestamoDuplicadoException;
+import java.util.List;
 
 public class RegistrarPrestamo extends JPanel {
     
@@ -45,17 +47,20 @@ public class RegistrarPrestamo extends JPanel {
         // Campo Correo del Lector
         JLabel lblCorreoLector = new JLabel("Correo del Lector:");
         lblCorreoLector.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtCorreoLector = new JTextField(20);
+        JComboBox<String> cmbCorreoLector = new JComboBox<>();
+        cargarCorreosLectores(cmbCorreoLector);
         
         // Campo Correo del Bibliotecario
         JLabel lblCorreoBiblio = new JLabel("Correo del Bibliotecario:");
         lblCorreoBiblio.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtCorreoBiblio = new JTextField(20);
+        JComboBox<String> cmbCorreoBiblio = new JComboBox<>();
+        cargarCorreosBibliotecarios(cmbCorreoBiblio);
         
         // Campo ID del Material
         JLabel lblMaterialId = new JLabel("ID del Material:");
         lblMaterialId.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtMaterialId = new JTextField(10);
+        JComboBox<String> cmbMaterialId = new JComboBox<>();
+        cargarIdsMateriales(cmbMaterialId);
         
         // Campo Fecha de Solicitud
         JLabel lblFechaSolicitud = new JLabel("Fecha de Solicitud:");
@@ -65,6 +70,13 @@ public class RegistrarPrestamo extends JPanel {
         JTextField txtDiaSolicitud = new JTextField(3);
         JTextField txtMesSolicitud = new JTextField(3);
         JTextField txtAnioSolicitud = new JTextField(5);
+        
+        // Establecer valores por defecto (fecha actual)
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        txtDiaSolicitud.setText(String.valueOf(cal.get(java.util.Calendar.DAY_OF_MONTH)));
+        txtMesSolicitud.setText(String.valueOf(cal.get(java.util.Calendar.MONTH) + 1));
+        txtAnioSolicitud.setText(String.valueOf(cal.get(java.util.Calendar.YEAR)));
+        
         fechaSolicitudPanel.add(new JLabel("Día:"));
         fechaSolicitudPanel.add(txtDiaSolicitud);
         fechaSolicitudPanel.add(new JLabel("Mes:"));
@@ -80,6 +92,13 @@ public class RegistrarPrestamo extends JPanel {
         JTextField txtDiaDevolucion = new JTextField(3);
         JTextField txtMesDevolucion = new JTextField(3);
         JTextField txtAnioDevolucion = new JTextField(5);
+        
+        // Establecer valores por defecto (fecha actual + 15 días)
+        cal.add(java.util.Calendar.DAY_OF_MONTH, 15);
+        txtDiaDevolucion.setText(String.valueOf(cal.get(java.util.Calendar.DAY_OF_MONTH)));
+        txtMesDevolucion.setText(String.valueOf(cal.get(java.util.Calendar.MONTH) + 1));
+        txtAnioDevolucion.setText(String.valueOf(cal.get(java.util.Calendar.YEAR)));
+        
         fechaDevolucionPanel.add(new JLabel("Día:"));
         fechaDevolucionPanel.add(txtDiaDevolucion);
         fechaDevolucionPanel.add(new JLabel("Mes:"));
@@ -94,11 +113,11 @@ public class RegistrarPrestamo extends JPanel {
         
         // Agregar campos al panel
         camposPanel.add(lblCorreoLector);
-        camposPanel.add(txtCorreoLector);
+        camposPanel.add(cmbCorreoLector);
         camposPanel.add(lblCorreoBiblio);
-        camposPanel.add(txtCorreoBiblio);
+        camposPanel.add(cmbCorreoBiblio);
         camposPanel.add(lblMaterialId);
-        camposPanel.add(txtMaterialId);
+        camposPanel.add(cmbMaterialId);
         camposPanel.add(lblFechaSolicitud);
         camposPanel.add(fechaSolicitudPanel);
         camposPanel.add(lblFechaDevolucion);
@@ -115,7 +134,19 @@ public class RegistrarPrestamo extends JPanel {
         JButton btnRegistrar = createActionButton("Registrar Préstamo", new Color(155, 89, 182));
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                registrarPrestamo(txtCorreoLector.getText(), txtCorreoBiblio.getText(), txtMaterialId.getText(),
+                String correoLector = (String)cmbCorreoLector.getSelectedItem();
+                String correoBibliotecario = (String)cmbCorreoBiblio.getSelectedItem();
+                String idMaterial = (String)cmbMaterialId.getSelectedItem();
+                
+                if (correoLector == null || correoBibliotecario == null || idMaterial == null) {
+                    JOptionPane.showMessageDialog(RegistrarPrestamo.this, 
+                        "Debe seleccionar un lector, bibliotecario y material", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                registrarPrestamo(correoLector, correoBibliotecario, 
+                    idMaterial,
                     txtDiaSolicitud.getText(), txtMesSolicitud.getText(), txtAnioSolicitud.getText(),
                     txtDiaDevolucion.getText(), txtMesDevolucion.getText(), txtAnioDevolucion.getText(),
                     (EstadoPrestamo)cmbEstado.getSelectedItem());
@@ -194,17 +225,50 @@ public class RegistrarPrestamo extends JPanel {
         }
 
         try {
-            Long materialId = Long.parseLong(materialIdStr);
+            // Validar y parsear ID del material
+            Long materialId;
+            try {
+                materialId = Long.parseLong(materialIdStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: El ID del material debe ser un número válido. Valor ingresado: '" + materialIdStr + "'",
+                    "Error de ID de Material",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
-            // Parsear fechas
-            int diaSolicitud = Integer.parseInt(diaSolicitudStr);
-            int mesSolicitud = Integer.parseInt(mesSolicitudStr);
-            int anioSolicitud = Integer.parseInt(anioSolicitudStr);
+            // Validar y parsear fecha de solicitud
+            int diaSolicitud, mesSolicitud, anioSolicitud;
+            try {
+                diaSolicitud = Integer.parseInt(diaSolicitudStr);
+                mesSolicitud = Integer.parseInt(mesSolicitudStr);
+                anioSolicitud = Integer.parseInt(anioSolicitudStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: Los valores de fecha de solicitud deben ser números válidos.\n" +
+                    "Día: '" + diaSolicitudStr + "', Mes: '" + mesSolicitudStr + "', Año: '" + anioSolicitudStr + "'",
+                    "Error de Fecha de Solicitud",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Validar y parsear fecha de devolución
+            int diaDevolucion, mesDevolucion, anioDevolucion;
+            try {
+                diaDevolucion = Integer.parseInt(diaDevolucionStr);
+                mesDevolucion = Integer.parseInt(mesDevolucionStr);
+                anioDevolucion = Integer.parseInt(anioDevolucionStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: Los valores de fecha de devolución deben ser números válidos.\n" +
+                    "Día: '" + diaDevolucionStr + "', Mes: '" + mesDevolucionStr + "', Año: '" + anioDevolucionStr + "'",
+                    "Error de Fecha de Devolución",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Crear objetos de fecha
             DtFecha fechaSolicitud = new DtFecha(diaSolicitud, mesSolicitud, anioSolicitud);
-            
-            int diaDevolucion = Integer.parseInt(diaDevolucionStr);
-            int mesDevolucion = Integer.parseInt(mesDevolucionStr);
-            int anioDevolucion = Integer.parseInt(anioDevolucionStr);
             DtFecha fechaDevolucion = new DtFecha(diaDevolucion, mesDevolucion, anioDevolucion);
             
             // Crear DtPrestamo
@@ -217,14 +281,24 @@ public class RegistrarPrestamo extends JPanel {
                 "Préstamo registrado exitosamente",
                 "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
-        } catch (NumberFormatException ex) {
+        } catch (PrestamoDuplicadoException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error: Los valores de fecha y ID de material deben ser números válidos",
+                ex.getMessage(),
+                "Préstamo Duplicado",
+                JOptionPane.WARNING_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this,
+                ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this,
+                ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Error al registrar préstamo: " + ex.getMessage(),
+                "Error inesperado al registrar préstamo: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -233,8 +307,51 @@ public class RegistrarPrestamo extends JPanel {
     
     private void volver() {
         panelCentral.removeAll();
-        panelCentral.add(new PanelRegistros(controlador, panelCentral));
+        panelCentral.add(new Inicio());
         panelCentral.revalidate();
         panelCentral.repaint();
+    }
+    
+    // Métodos para cargar datos en los ComboBox
+    private void cargarCorreosLectores(JComboBox<String> comboBox) {
+        try {
+            List<String> correos = controlador.listarLectores();
+            comboBox.removeAllItems();
+            
+            for (String correo : correos) {
+                comboBox.addItem(correo);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar lectores: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarCorreosBibliotecarios(JComboBox<String> comboBox) {
+        try {
+            List<String> correos = controlador.listarBibliotecarios();
+            comboBox.removeAllItems();
+            
+            for (String correo : correos) {
+                comboBox.addItem(correo);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar bibliotecarios: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarIdsMateriales(JComboBox<String> comboBox) {
+        try {
+            List<String> ids = controlador.listarIdsMateriales();
+            comboBox.removeAllItems();
+            
+            for (String id : ids) {
+                comboBox.addItem(id);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar materiales: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

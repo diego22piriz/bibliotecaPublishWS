@@ -29,5 +29,10 @@ public class DtPrestamo {
     public DtFecha getFechaDevolucion() { return fechaDevolucion; }
     public EstadoPrestamo getEstado() { return estado; }
     
-    // setters...
+    public void setLectorCorreo(String lectorCorreo) { this.lectorCorreo = lectorCorreo; }
+    public void setBibliotecarioCorreo(String bibliotecarioCorreo) { this.bibliotecarioCorreo = bibliotecarioCorreo; }
+    public void setMaterialId(Long materialId) { this.materialId = materialId; }
+    public void setFechaSolicitud(DtFecha fechaSolicitud) { this.fechaSolicitud = fechaSolicitud; }
+    public void setFechaDevolucion(DtFecha fechaDevolucion) { this.fechaDevolucion = fechaDevolucion; }
+    public void setEstado(EstadoPrestamo estado) { this.estado = estado; }
 }

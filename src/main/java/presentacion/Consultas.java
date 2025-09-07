@@ -4,10 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import interfaces.IControlador;
+import interfaces.Fabrica;
 
 public class Consultas extends JPanel {
     
+    private IControlador controlador;
+    
     public Consultas() {
+        this.controlador = Fabrica.getInstancia().getIControlador();
         initialize();
     }
     
@@ -24,18 +29,27 @@ public class Consultas extends JPanel {
         
         // Panel de botones de consulta
         JPanel botonesPanel = new JPanel();
-        botonesPanel.setLayout(new GridLayout(2, 2, 20, 20));
+        botonesPanel.setLayout(new GridLayout(2, 3, 20, 20));
         botonesPanel.setBackground(Color.WHITE);
         botonesPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         
         // Botones de consulta
         JButton btnConsultarUsuarios = createActionButton("Consultar Usuarios", new Color(46, 204, 113));
         JButton btnConsultarLibros = createActionButton("Consultar Libros", new Color(52, 152, 219));
-        JButton btnConsultarPrestamos = createActionButton("Consultar Préstamos", new Color(155, 89, 182));
-        JButton btnReportes = createActionButton("Generar Reportes", new Color(231, 76, 60));
+        JButton btnConsultarMateriales = createActionButton("Consultar Materiales", new Color(155, 89, 182));
+        JButton btnConsultarPrestamos = createActionButton("Consultar Préstamos", new Color(231, 76, 60));
+        JButton btnReportes = createActionButton("Generar Reportes", new Color(230, 126, 34));
+        
+        // Event listeners
+        btnConsultarMateriales.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarConsultarMateriales();
+            }
+        });
         
         botonesPanel.add(btnConsultarUsuarios);
         botonesPanel.add(btnConsultarLibros);
+        botonesPanel.add(btnConsultarMateriales);
         botonesPanel.add(btnConsultarPrestamos);
         botonesPanel.add(btnReportes);
         
@@ -63,5 +77,16 @@ public class Consultas extends JPanel {
         });
         
         return button;
+    }
+    
+    private void mostrarConsultarMateriales() {
+        // Limpiar el panel central y mostrar la pantalla de consultar materiales
+        Container parent = getParent();
+        if (parent != null) {
+            parent.removeAll();
+            parent.add(new ConsultarMateriales(controlador, this));
+            parent.revalidate();
+            parent.repaint();
+        }
     }
 }

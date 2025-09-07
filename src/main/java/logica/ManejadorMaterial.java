@@ -1,12 +1,12 @@
 // ProgApProy/src/main/java/logica/ManejadorMaterial.java
 package logica;
 
-import datatypes.DtMaterial;
 import datatypes.DtLibro;
 import datatypes.DtArticulo;
 import persistencia.Conexion;
 import javax.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
 
 public class ManejadorMaterial {
     
@@ -56,20 +56,76 @@ public class ManejadorMaterial {
         return material != null;
     }
     
-    // Listar todos los materiales
-    public List<Material> listarMateriales() {
-        Query query = em.createQuery("SELECT m FROM Material m");
-        return query.getResultList();
+    // Listar todos los materiales con información detallada
+    public ArrayList<String> listarMateriales() {
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        
+        ArrayList<String> aRetornar = new ArrayList<>();
+        
+        // Obtener libros
+        Query queryLibros = em.createQuery("SELECT l FROM Libro l");
+        @SuppressWarnings("unchecked")
+        List<Libro> listLibros = (List<Libro>) queryLibros.getResultList();
+        for (Libro libro : listLibros) {
+            String info = String.format("ID: %d | Tipo: LIBRO | Título: %s",
+                libro.getId(),
+                libro.getTitulo()
+            );
+            aRetornar.add(info);
+        }
+        
+        // Obtener artículos
+        Query queryArticulos = em.createQuery("SELECT a FROM Articulo a");
+        @SuppressWarnings("unchecked")
+        List<Articulo> listArticulos = (List<Articulo>) queryArticulos.getResultList();
+        for (Articulo articulo : listArticulos) {
+            String info = String.format("ID: %d | Tipo: ARTÍCULO | Descripción: %s",
+                articulo.getId(),
+                articulo.getDescripcion()
+            );
+            aRetornar.add(info);
+        }
+        
+        return aRetornar;
+    }
+    
+    // Listar solo los IDs de los materiales (para formularios)
+    public ArrayList<String> listarIdsMateriales() {
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        
+        ArrayList<String> aRetornar = new ArrayList<>();
+        
+        // Obtener IDs de libros
+        Query queryLibros = em.createQuery("SELECT l.id FROM Libro l");
+        @SuppressWarnings("unchecked")
+        List<Long> listIdsLibros = (List<Long>) queryLibros.getResultList();
+        for (Long id : listIdsLibros) {
+            aRetornar.add(String.valueOf(id));
+        }
+        
+        // Obtener IDs de artículos
+        Query queryArticulos = em.createQuery("SELECT a.id FROM Articulo a");
+        @SuppressWarnings("unchecked")
+        List<Long> listIdsArticulos = (List<Long>) queryArticulos.getResultList();
+        for (Long id : listIdsArticulos) {
+            aRetornar.add(String.valueOf(id));
+        }
+        
+        return aRetornar;
     }
     
     // Listar por tipo específico
+    @SuppressWarnings("unchecked")
     public List<Libro> listarLibros() {
-        Query query = em.createQuery("SELECT l FROM Libro l");
+        javax.persistence.Query query = em.createQuery("SELECT l FROM Libro l");
         return query.getResultList();
     }
     
+    @SuppressWarnings("unchecked")
     public List<Articulo> listarArticulos() {
-        Query query = em.createQuery("SELECT a FROM Articulo a");
+        javax.persistence.Query query = em.createQuery("SELECT a FROM Articulo a");
         return query.getResultList();
     }
     

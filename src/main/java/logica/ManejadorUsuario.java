@@ -1,12 +1,13 @@
 package logica;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import persistencia.Conexion;
-import datatypes.DtFecha;
 import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
-import datatypes.DtFecha;
+import java.util.List;
 
 public class ManejadorUsuario {
     
@@ -76,5 +77,28 @@ public class ManejadorUsuario {
 
     public Bibliotecario buscarBibliotecario(String correo) {
         return em.find(Bibliotecario.class, correo);
+    }
+
+    public void cambiarZona(String correo, String zona){
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        em.getTransaction().begin();
+        Usuario usr = em.find(Usuario.class, correo);
+        RedBiblioteca bib = RedBiblioteca.valueOf(zona);
+        ((Lector)usr).setRedBiblioteca(bib);
+        em.getTransaction().commit();
+    }
+    
+            // Métodos para obtener listas de usuarios
+    @SuppressWarnings("unchecked")
+    public List<String> listarLectores() {
+        Query query = em.createQuery("SELECT l.correo FROM Lector l");
+        return query.getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<String> listarBibliotecarios() {
+        Query query = em.createQuery("SELECT b.correo FROM Bibliotecario b");
+        return query.getResultList();
     }
 }
