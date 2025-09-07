@@ -7,6 +7,7 @@ import datatypes.DtArticulo;
 import datatypes.DtPrestamo;
 import excepciones.UsuarioRepetidoException;
 import excepciones.PrestamoDuplicadoException;
+import logica.Prestamo;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -30,4 +31,10 @@ public interface IControlador {
     List<String> listarLectores();
     List<String> listarBibliotecarios();
     ArrayList<String> listarMateriales();
+    ArrayList<String> listarIdsMateriales();
+    
+    // Métodos para gestión de préstamos
+    List<Prestamo> listarPrestamos();
+    Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId);
+    void actualizarPrestamo(DtPrestamo dtPrestamo);
 }

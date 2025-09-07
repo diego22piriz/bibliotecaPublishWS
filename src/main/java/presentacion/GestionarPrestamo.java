@@ -42,6 +42,14 @@ public class GestionarPrestamo extends JPanel {
             }
         });
         
+        // Botón Actualizar Préstamo
+        JButton btnActualizarPrestamo = createActionButton("Actualizar Préstamo", new Color(46, 204, 113));
+        btnActualizarPrestamo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarActualizarPrestamo();
+            }
+        });
+        
         // Botón Listar Préstamos
         JButton btnListarPrestamos = createActionButton("Listar Préstamos", new Color(52, 152, 219));
         btnListarPrestamos.addActionListener(new ActionListener() {
@@ -53,6 +61,8 @@ public class GestionarPrestamo extends JPanel {
         // Centrar los botones
         buttonPanel.add(Box.createVerticalGlue());
         buttonPanel.add(btnRegistrarPrestamo);
+        buttonPanel.add(Box.createVerticalStrut(20));
+        buttonPanel.add(btnActualizarPrestamo);
         buttonPanel.add(Box.createVerticalStrut(20));
         buttonPanel.add(btnListarPrestamos);
         buttonPanel.add(Box.createVerticalGlue());
@@ -87,6 +97,13 @@ public class GestionarPrestamo extends JPanel {
     private void mostrarRegistrarPrestamo() {
         panelCentral.removeAll();
         panelCentral.add(new RegistrarPrestamo(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+    
+    private void mostrarActualizarPrestamo() {
+        panelCentral.removeAll();
+        panelCentral.add(new ActualizarPrestamo(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
     }

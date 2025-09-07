@@ -70,6 +70,13 @@ public class RegistrarPrestamo extends JPanel {
         JTextField txtDiaSolicitud = new JTextField(3);
         JTextField txtMesSolicitud = new JTextField(3);
         JTextField txtAnioSolicitud = new JTextField(5);
+        
+        // Establecer valores por defecto (fecha actual)
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        txtDiaSolicitud.setText(String.valueOf(cal.get(java.util.Calendar.DAY_OF_MONTH)));
+        txtMesSolicitud.setText(String.valueOf(cal.get(java.util.Calendar.MONTH) + 1));
+        txtAnioSolicitud.setText(String.valueOf(cal.get(java.util.Calendar.YEAR)));
+        
         fechaSolicitudPanel.add(new JLabel("Día:"));
         fechaSolicitudPanel.add(txtDiaSolicitud);
         fechaSolicitudPanel.add(new JLabel("Mes:"));
@@ -85,6 +92,13 @@ public class RegistrarPrestamo extends JPanel {
         JTextField txtDiaDevolucion = new JTextField(3);
         JTextField txtMesDevolucion = new JTextField(3);
         JTextField txtAnioDevolucion = new JTextField(5);
+        
+        // Establecer valores por defecto (fecha actual + 15 días)
+        cal.add(java.util.Calendar.DAY_OF_MONTH, 15);
+        txtDiaDevolucion.setText(String.valueOf(cal.get(java.util.Calendar.DAY_OF_MONTH)));
+        txtMesDevolucion.setText(String.valueOf(cal.get(java.util.Calendar.MONTH) + 1));
+        txtAnioDevolucion.setText(String.valueOf(cal.get(java.util.Calendar.YEAR)));
+        
         fechaDevolucionPanel.add(new JLabel("Día:"));
         fechaDevolucionPanel.add(txtDiaDevolucion);
         fechaDevolucionPanel.add(new JLabel("Mes:"));
@@ -211,17 +225,50 @@ public class RegistrarPrestamo extends JPanel {
         }
 
         try {
-            Long materialId = Long.parseLong(materialIdStr);
+            // Validar y parsear ID del material
+            Long materialId;
+            try {
+                materialId = Long.parseLong(materialIdStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: El ID del material debe ser un número válido. Valor ingresado: '" + materialIdStr + "'",
+                    "Error de ID de Material",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
-            // Parsear fechas
-            int diaSolicitud = Integer.parseInt(diaSolicitudStr);
-            int mesSolicitud = Integer.parseInt(mesSolicitudStr);
-            int anioSolicitud = Integer.parseInt(anioSolicitudStr);
+            // Validar y parsear fecha de solicitud
+            int diaSolicitud, mesSolicitud, anioSolicitud;
+            try {
+                diaSolicitud = Integer.parseInt(diaSolicitudStr);
+                mesSolicitud = Integer.parseInt(mesSolicitudStr);
+                anioSolicitud = Integer.parseInt(anioSolicitudStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: Los valores de fecha de solicitud deben ser números válidos.\n" +
+                    "Día: '" + diaSolicitudStr + "', Mes: '" + mesSolicitudStr + "', Año: '" + anioSolicitudStr + "'",
+                    "Error de Fecha de Solicitud",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Validar y parsear fecha de devolución
+            int diaDevolucion, mesDevolucion, anioDevolucion;
+            try {
+                diaDevolucion = Integer.parseInt(diaDevolucionStr);
+                mesDevolucion = Integer.parseInt(mesDevolucionStr);
+                anioDevolucion = Integer.parseInt(anioDevolucionStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: Los valores de fecha de devolución deben ser números válidos.\n" +
+                    "Día: '" + diaDevolucionStr + "', Mes: '" + mesDevolucionStr + "', Año: '" + anioDevolucionStr + "'",
+                    "Error de Fecha de Devolución",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Crear objetos de fecha
             DtFecha fechaSolicitud = new DtFecha(diaSolicitud, mesSolicitud, anioSolicitud);
-            
-            int diaDevolucion = Integer.parseInt(diaDevolucionStr);
-            int mesDevolucion = Integer.parseInt(mesDevolucionStr);
-            int anioDevolucion = Integer.parseInt(anioDevolucionStr);
             DtFecha fechaDevolucion = new DtFecha(diaDevolucion, mesDevolucion, anioDevolucion);
             
             // Crear DtPrestamo
@@ -234,11 +281,6 @@ public class RegistrarPrestamo extends JPanel {
                 "Préstamo registrado exitosamente",
                 "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                "Error: Los valores de fecha y ID de material deben ser números válidos",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
         } catch (PrestamoDuplicadoException ex) {
             JOptionPane.showMessageDialog(this,
                 ex.getMessage(),
@@ -301,7 +343,7 @@ public class RegistrarPrestamo extends JPanel {
     
     private void cargarIdsMateriales(JComboBox<String> comboBox) {
         try {
-            List<String> ids = controlador.listarMateriales();
+            List<String> ids = controlador.listarIdsMateriales();
             comboBox.removeAllItems();
             
             for (String id : ids) {

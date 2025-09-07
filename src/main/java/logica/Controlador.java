@@ -116,16 +116,32 @@ public class Controlador implements IControlador {
 
         em.getTransaction().begin();
         try {
-            Prestamo prestamo = new Prestamo(material, lector, bibliotecario, dtPrestamo.getFechaSolicitud(), dtPrestamo.getFechaDevolucion());
-            prestamo.setEstado(dtPrestamo.getEstado());
-            // Mantener relaciones bidireccionales
+            // Crear el préstamo
+            Prestamo prestamo = ManejadorPrestamo.getInstancia().CrearPrestamo(dtPrestamo);
+            
+            // Establecer la clave compuesta (OBLIGATORIO para entidades con clave compuesta)
+            prestamo.setLectorCorreo(lector.getCorreo());
+            prestamo.setBibliotecarioCorreo(bibliotecario.getCorreo());
+            prestamo.setMaterialId(material.getId());
+            
+            // Establecer las relaciones
+            prestamo.setLector(lector);
+            prestamo.setBibliotecario(bibliotecario);
+            prestamo.setMaterial(material);
+            
+            // Agregar el préstamo a las entidades relacionadas
             lector.addPrestamo(prestamo);
             bibliotecario.addPrestamo(prestamo);
             material.addPrestamo(prestamo);
+            
+            // Persistir el préstamo
             em.persist(prestamo);
             em.getTransaction().commit();
+            JOptionPane.showMessageDialog(null, "Préstamo registrado correctamente.");
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             throw new RuntimeException("Error al registrar préstamo: " + e.getMessage(), e);
         }
     }
@@ -142,6 +158,52 @@ public class Controlador implements IControlador {
     public ArrayList<String> listarMateriales() {
         return manejadorMaterial.listarMateriales();
     }
+    
+    public ArrayList<String> listarIdsMateriales() {
+        return manejadorMaterial.listarIdsMateriales();
+    }
+    
+    // Métodos para gestión de préstamos
+    public List<Prestamo> listarPrestamos() {
+        return ManejadorPrestamo.getInstancia().listarPrestamos();
+    }
+    
+    public Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId) {
+        return ManejadorPrestamo.getInstancia().buscarPrestamo(lectorCorreo, bibliotecarioCorreo, materialId);
+    }
+    
+    public void actualizarPrestamo(DtPrestamo dtPrestamo) {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        
+        // Buscar el préstamo existente
+        Prestamo prestamo = ManejadorPrestamo.getInstancia().buscarPrestamo(
+            dtPrestamo.getLectorCorreo(), 
+            dtPrestamo.getBibliotecarioCorreo(), 
+            dtPrestamo.getMaterialId()
+        );
+        
+        if (prestamo == null) {
+            throw new IllegalArgumentException("Préstamo no encontrado");
+        }
+        
+        em.getTransaction().begin();
+        try {
+            // Actualizar el préstamo
+            ManejadorPrestamo.getInstancia().actualizarPrestamo(prestamo, dtPrestamo);
+            
+            // Hacer merge para sincronizar los cambios con la base de datos
+            em.merge(prestamo);
+            
+            em.getTransaction().commit();
+            JOptionPane.showMessageDialog(null, "Préstamo actualizado correctamente.");
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Error al actualizar préstamo: " + e.getMessage(), e);
+        }
+    }
+    
 }
 
 

@@ -65,6 +65,7 @@ public class ManejadorMaterial {
         
         // Obtener libros
         Query queryLibros = em.createQuery("SELECT l FROM Libro l");
+        @SuppressWarnings("unchecked")
         List<Libro> listLibros = (List<Libro>) queryLibros.getResultList();
         for (Libro libro : listLibros) {
             String info = String.format("ID: %d | Tipo: LIBRO | Título: %s",
@@ -76,6 +77,7 @@ public class ManejadorMaterial {
         
         // Obtener artículos
         Query queryArticulos = em.createQuery("SELECT a FROM Articulo a");
+        @SuppressWarnings("unchecked")
         List<Articulo> listArticulos = (List<Articulo>) queryArticulos.getResultList();
         for (Articulo articulo : listArticulos) {
             String info = String.format("ID: %d | Tipo: ARTÍCULO | Descripción: %s",
@@ -83,6 +85,32 @@ public class ManejadorMaterial {
                 articulo.getDescripcion()
             );
             aRetornar.add(info);
+        }
+        
+        return aRetornar;
+    }
+    
+    // Listar solo los IDs de los materiales (para formularios)
+    public ArrayList<String> listarIdsMateriales() {
+        Conexion conexion = Conexion.getInstancia();
+        EntityManager em = conexion.getEntityManager();
+        
+        ArrayList<String> aRetornar = new ArrayList<>();
+        
+        // Obtener IDs de libros
+        Query queryLibros = em.createQuery("SELECT l.id FROM Libro l");
+        @SuppressWarnings("unchecked")
+        List<Long> listIdsLibros = (List<Long>) queryLibros.getResultList();
+        for (Long id : listIdsLibros) {
+            aRetornar.add(String.valueOf(id));
+        }
+        
+        // Obtener IDs de artículos
+        Query queryArticulos = em.createQuery("SELECT a.id FROM Articulo a");
+        @SuppressWarnings("unchecked")
+        List<Long> listIdsArticulos = (List<Long>) queryArticulos.getResultList();
+        for (Long id : listIdsArticulos) {
+            aRetornar.add(String.valueOf(id));
         }
         
         return aRetornar;
