@@ -98,7 +98,7 @@ public class ListarPrestamosLector extends JPanel{
         btnVolver.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 panelCentral.removeAll();
-                panelCentral.add(new GestionarPrestamo(controlador, panelCentral));
+                panelCentral.add(new Inicio());
                 panelCentral.revalidate();
                 panelCentral.repaint();
             }

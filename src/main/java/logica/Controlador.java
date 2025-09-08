@@ -212,6 +212,39 @@ public class Controlador implements IControlador {
         }
     }
     
+    // Método para obtener materiales con muchos préstamos pendientes
+    public List<String> obtenerMaterialesConPrestamosPendientes() {
+        List<Object[]> resultados = manejadorMaterial.obtenerMaterialesConPrestamosPendientes();
+        List<String> materialesInfo = new ArrayList<>();
+        
+        for (Object[] resultado : resultados) {
+            Long materialId = (Long) resultado[0];
+            Long cantidadPrestamos = (Long) resultado[1];
+            
+            // Buscar el material completo por ID
+            Material material = manejadorMaterial.buscarMaterial(materialId);
+            if (material == null) {
+                continue; // Saltar si no se encuentra el material
+            }
+            
+            String tipoMaterial = material instanceof Libro ? "LIBRO" : "ARTÍCULO";
+            String nombreMaterial;
+            
+            if (material instanceof Libro) {
+                nombreMaterial = ((Libro) material).getTitulo();
+            } else {
+                nombreMaterial = ((Articulo) material).getDescripcion();
+            }
+            
+            String info = String.format("ID: %d | Tipo: %s | Nombre: %s | Préstamos Pendientes: %d",
+                material.getId(), tipoMaterial, nombreMaterial, cantidadPrestamos);
+            materialesInfo.add(info);
+        }
+        
+        return materialesInfo;
+    }
+    
+    
 }
 
 

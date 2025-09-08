@@ -39,4 +39,7 @@ public interface IControlador {
     List<Prestamo> listarPrestamosBibliotecario(String correo);
     Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId);
     void actualizarPrestamo(DtPrestamo dtPrestamo);
+    
+    // Métodos para análisis de préstamos
+    List<String> obtenerMaterialesConPrestamosPendientes();
 }

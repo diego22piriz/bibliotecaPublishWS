@@ -129,4 +129,25 @@ public class ManejadorMaterial {
         return query.getResultList();
     }
     
+    // Obtener materiales con 3 o más préstamos pendientes ordenados por cantidad
+    public List<Object[]> obtenerMaterialesConPrestamosPendientes() {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        
+        // Consulta para obtener materiales con 3 o más préstamos pendientes, contando la cantidad
+        Query query = em.createQuery(
+            "SELECT p.material.id, COUNT(p) " +
+            "FROM Prestamo p " +
+            "WHERE p.estado = :estadoPendiente " +
+            "GROUP BY p.material.id " +
+            "HAVING COUNT(p) >= 3 " +
+            "ORDER BY COUNT(p) DESC"
+        );
+        query.setParameter("estadoPendiente", datatypes.EstadoPrestamo.PENDIENTE);
+        
+        @SuppressWarnings("unchecked")
+        List<Object[]> resultados = query.getResultList();
+        return resultados;
+    }
+    
+    
 }
