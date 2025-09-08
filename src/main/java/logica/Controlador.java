@@ -168,6 +168,14 @@ public class Controlador implements IControlador {
         return ManejadorPrestamo.getInstancia().listarPrestamos();
     }
     
+    public List<Prestamo> listarPrestamosLector(String correo) {
+        return ManejadorPrestamo.getInstancia().listarPrestamosLector(correo);
+    }
+
+    public List<Prestamo> listarPrestamosBibliotecario(String correo) {
+        return ManejadorPrestamo.getInstancia().listarPrestamosBibliotecario(correo);
+    }
+
     public Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId) {
         return ManejadorPrestamo.getInstancia().buscarPrestamo(lectorCorreo, bibliotecarioCorreo, materialId);
     }

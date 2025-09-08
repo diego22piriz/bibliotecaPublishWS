@@ -57,6 +57,22 @@ public class GestionarPrestamo extends JPanel {
                 mostrarListarPrestamos();
             }
         });
+
+        // Botón Listar Préstamos Lector
+        JButton btnListarPrestamosLector = createActionButton("Listar Préstamos De Un Lector", new Color(52, 152, 219));
+        btnListarPrestamosLector.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                 mostrarListarPrestamosLector();
+            }
+        });
+        
+        // Botón Listar Préstamos Bibliotecario
+        JButton btnListarPrestamosBibliotecario = createActionButton("Listar Préstamos De Un Bibliotecario", new Color(52, 152, 219));
+        btnListarPrestamosBibliotecario.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                 mostrarListarPrestamosBibliotecario();
+            }
+        });
         
         // Centrar los botones
         buttonPanel.add(Box.createVerticalGlue());
@@ -64,7 +80,9 @@ public class GestionarPrestamo extends JPanel {
         buttonPanel.add(Box.createVerticalStrut(20));
         buttonPanel.add(btnActualizarPrestamo);
         buttonPanel.add(Box.createVerticalStrut(20));
-        buttonPanel.add(btnListarPrestamos);
+        buttonPanel.add(btnListarPrestamosLector);
+        buttonPanel.add(Box.createVerticalStrut(20));
+        buttonPanel.add(btnListarPrestamosBibliotecario);
         buttonPanel.add(Box.createVerticalGlue());
         
         add(buttonPanel, BorderLayout.CENTER);
@@ -111,5 +129,19 @@ public class GestionarPrestamo extends JPanel {
     private void mostrarListarPrestamos() {
         JOptionPane.showMessageDialog(this, "Funcionalidad de listar préstamos en desarrollo", 
             "En desarrollo", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void mostrarListarPrestamosLector() {
+        panelCentral.removeAll();
+        panelCentral.add(new ListarPrestamosLector(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+
+    private void mostrarListarPrestamosBibliotecario() {
+        panelCentral.removeAll();
+        panelCentral.add(new ListarPrestamosBibliotecario(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
     }
 }

@@ -50,6 +50,26 @@ public class ManejadorPrestamo {
         List<Prestamo> prestamos = query.getResultList();
         return prestamos;
     }
+
+    // listar prestamos de un lector especifico
+    public List<Prestamo> listarPrestamosLector(String correo) {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        Query query = em.createQuery("SELECT p FROM Prestamo p WHERE p.lectorCorreo = :correo");
+        query.setParameter("correo", correo);
+        @SuppressWarnings("unchecked")
+        List<Prestamo> prestamos = query.getResultList();
+        return prestamos;
+    }
+
+    // listar prestamos de un bibliotecario especifico
+    public List<Prestamo> listarPrestamosBibliotecario(String correo) {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        Query query = em.createQuery("SELECT p FROM Prestamo p WHERE p.bibliotecarioCorreo = :correo");
+        query.setParameter("correo", correo);
+        @SuppressWarnings("unchecked")
+        List<Prestamo> prestamos = query.getResultList();
+        return prestamos;
+    }
     
     // Actualizar préstamo
     public void actualizarPrestamo(Prestamo prestamo, DtPrestamo dtPrestamo) {

@@ -35,6 +35,8 @@ public interface IControlador {
     
     // Métodos para gestión de préstamos
     List<Prestamo> listarPrestamos();
+    List<Prestamo> listarPrestamosLector(String correo);
+    List<Prestamo> listarPrestamosBibliotecario(String correo);
     Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId);
     void actualizarPrestamo(DtPrestamo dtPrestamo);
 }
