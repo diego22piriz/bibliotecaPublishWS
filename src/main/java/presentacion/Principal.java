@@ -207,11 +207,19 @@ public class Principal extends JFrame {
             }
         });
         
+        JMenuItem itemReporteZona = createPopupMenuItem("Reporte Préstamos por Zona", new Color(155, 89, 182));
+        itemReporteZona.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarReportePrestamosZona();
+            }
+        });
+
         popup.add(itemGestionarUsuario);
         popup.add(itemGestionarMaterial);
         popup.add(itemGestionarPrestamo);
         popup.add(itemGestionarDevolucion);
-        
+        popup.add(itemReporteZona);
+
         return popup;
     }
     
@@ -300,4 +308,10 @@ public class Principal extends JFrame {
         panelCentral.repaint();
     }
 
+    private void mostrarReportePrestamosZona() {
+        panelCentral.removeAll();
+        panelCentral.add(new ReportePrestamosZonaPanel());
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
 }
