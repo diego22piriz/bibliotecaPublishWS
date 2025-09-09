@@ -255,10 +255,25 @@ public class Principal extends JFrame {
             }
         });
         
+        JMenuItem itemGestionarDevolucion = createPopupMenuItem("Gestionar Devolución", new Color(231, 76, 60));
+        itemGestionarDevolucion.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarGestionarDevolucion();
+            }
+        });
+        
+        JMenuItem itemPrestamosPorZona = createPopupMenuItem("Préstamos por Zona", new Color(52, 152, 219));
+        itemPrestamosPorZona.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPrestamosPorZona();
+            }
+        });
+
         popup.add(itemGestionarUsuario);
         popup.add(itemGestionarMaterial);
         popup.add(itemGestionarPrestamo);
-        
+        popup.add(itemGestionarDevolucion);
+        popup.add(itemPrestamosPorZona);
         return popup;
     }
     
@@ -369,5 +384,17 @@ public class Principal extends JFrame {
         panelCentral.repaint();
     }
     
+    private void mostrarGestionarDevolucion() {
+        panelCentral.removeAll();
+        panelCentral.add(new CambiarZona(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
 
+    private void mostrarPrestamosPorZona() {
+        panelCentral.removeAll();
+        panelCentral.add(new PrestamosPorZonaPanel());
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
 }
