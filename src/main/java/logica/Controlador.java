@@ -272,7 +272,14 @@ public class Controlador implements IControlador {
         return materialesInfo;
     }
     
+    // Métodos para consultas por zona
+    public List<String> obtenerTodasLasZonas() {
+        return ManejadorPrestamo.getInstancia().obtenerTodasLasZonas();
+    }
     
+    public List<Prestamo> obtenerPrestamosDeZona(String zona) {
+        return ManejadorPrestamo.getInstancia().obtenerPrestamosDeZona(zona);
+    }
 }
 
 

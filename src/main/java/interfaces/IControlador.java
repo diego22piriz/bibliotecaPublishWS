@@ -45,4 +45,8 @@ public interface IControlador {
     
     // Métodos para consultas por fechas
     List<String> obtenerMaterialesPorRangoFechas(datatypes.DtFecha fechaInicio, datatypes.DtFecha fechaFin);
+    
+    // Métodos para consultas por zona
+    List<String> obtenerTodasLasZonas();
+    List<Prestamo> obtenerPrestamosDeZona(String zona);
 }

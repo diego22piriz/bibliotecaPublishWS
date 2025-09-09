@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import interfaces.IControlador;
-import excepciones.UsuarioRepetidoException;
 
 public class RegistrarUsuario extends JPanel {
     

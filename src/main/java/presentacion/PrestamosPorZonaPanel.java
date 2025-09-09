@@ -1,6 +1,6 @@
 package presentacion;
 
-import logica.ManejadorPrestamo;
+import interfaces.IControlador;
 import logica.Prestamo;
 import logica.Libro;
 
@@ -10,16 +10,18 @@ import java.awt.*;
 import java.util.List;
 
 public class PrestamosPorZonaPanel extends JPanel {
+    private IControlador controlador;
     private JComboBox<String> zonaComboBox;
     private JTable tabla;
     private DefaultTableModel modeloTabla;
     private JButton btnBuscar;
 
-    public PrestamosPorZonaPanel() {
+    public PrestamosPorZonaPanel(IControlador controlador) {
+        this.controlador = controlador;
         setLayout(new BorderLayout());
 
         zonaComboBox = new JComboBox<>();
-        List<String> zonas = ManejadorPrestamo.getInstancia().obtenerTodasLasZonas();
+        List<String> zonas = controlador.obtenerTodasLasZonas();
         for (String zona : zonas) zonaComboBox.addItem(zona);
 
         btnBuscar = new JButton("Buscar préstamos de zona");
@@ -43,7 +45,7 @@ public class PrestamosPorZonaPanel extends JPanel {
 
         btnBuscar.addActionListener(e -> {
             String zona = (String) zonaComboBox.getSelectedItem();
-            List<Prestamo> prestamos = ManejadorPrestamo.getInstancia().obtenerPrestamosDeZona(zona);
+            List<Prestamo> prestamos = controlador.obtenerPrestamosDeZona(zona);
             modeloTabla.setRowCount(0);
             for (Prestamo p : prestamos) {
                 String titulo = "";

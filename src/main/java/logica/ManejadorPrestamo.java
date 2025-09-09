@@ -1,5 +1,6 @@
 package logica;
 import datatypes.DtPrestamo;
+import datatypes.RedBiblioteca;
 import javax.persistence.*;
 import persistencia.Conexion;
 import java.util.List;
@@ -80,49 +81,26 @@ public class ManejadorPrestamo {
         prestamo.setEstado(dtPrestamo.getEstado());
     }
 
-    //---------------------------
-    // DTO para el reporte
-    public static class ZonaPrestamosDTO {
-        private String zona;
-        private Long cantidad;
-
-        public ZonaPrestamosDTO(String zona, Long cantidad) {
-            this.zona = zona;
-            this.cantidad = cantidad;
-        }
-
-        public String getZona() { return zona; }
-        public Long getCantidad() { return cantidad; }
-    }
-
-    // Obtener todas las zonas y cantidad de préstamos
-    public List<ZonaPrestamosDTO> obtenerPrestamosPorZona() {
-        EntityManager em = Conexion.getInstancia().getEntityManager();
-        TypedQuery<Object[]> query = em.createQuery(
-            "SELECT l.redBiblioteca, COUNT(p) " +
-            "FROM Prestamo p JOIN p.lector l " +
-            "GROUP BY l.redBiblioteca", Object[].class);
-
-        List<Object[]> resultados = query.getResultList();
-        return resultados.stream()
-            .map(r -> new ZonaPrestamosDTO((String) r[0], (Long) r[1]))
-            .collect(Collectors.toList());
-    }
-
-    // Obtener todos los préstamos de una zona específica
+    // Obtener préstamos de una zona específica
     public List<Prestamo> obtenerPrestamosDeZona(String zona) {
         EntityManager em = Conexion.getInstancia().getEntityManager();
-        TypedQuery<Prestamo> query = em.createQuery(
-            "SELECT p FROM Prestamo p JOIN p.lector l WHERE l.redBiblioteca = :zona", Prestamo.class);
-        query.setParameter("zona", zona);
-        return query.getResultList();
+        RedBiblioteca zonaEnum = RedBiblioteca.valueOf(zona);
+        Query query = em.createQuery(
+            "SELECT p FROM Prestamo p JOIN p.lector l WHERE l.redBiblioteca = :zona");
+        query.setParameter("zona", zonaEnum);
+        @SuppressWarnings("unchecked")
+        List<Prestamo> prestamos = query.getResultList();
+        return prestamos;
     }
 
     // Obtener todas las zonas (para el selector)
     public List<String> obtenerTodasLasZonas() {
         EntityManager em = Conexion.getInstancia().getEntityManager();
-        TypedQuery<String> query = em.createQuery(
-            "SELECT DISTINCT l.redBiblioteca FROM Lector l", String.class);
-        return query.getResultList();
+        TypedQuery<RedBiblioteca> query = em.createQuery(
+            "SELECT DISTINCT l.redBiblioteca FROM Lector l", RedBiblioteca.class);
+        List<RedBiblioteca> zonasEnum = query.getResultList();
+        return zonasEnum.stream()
+            .map(RedBiblioteca::name)
+            .collect(Collectors.toList());
     }
 }
