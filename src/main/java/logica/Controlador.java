@@ -244,6 +244,34 @@ public class Controlador implements IControlador {
         return materialesInfo;
     }
     
+    // Método para obtener materiales registrados en un rango de fechas
+    public List<String> obtenerMaterialesPorRangoFechas(datatypes.DtFecha fechaInicio, datatypes.DtFecha fechaFin) {
+        List<Material> materiales = manejadorMaterial.obtenerMaterialesPorRangoFechas(fechaInicio, fechaFin);
+        List<String> materialesInfo = new ArrayList<>();
+        
+        for (Material material : materiales) {
+            String tipoMaterial = material instanceof Libro ? "LIBRO" : "ARTÍCULO";
+            String nombreMaterial;
+            
+            if (material instanceof Libro) {
+                nombreMaterial = ((Libro) material).getTitulo();
+            } else {
+                nombreMaterial = ((Articulo) material).getDescripcion();
+            }
+            
+            String fechaIngreso = String.format("%02d/%02d/%04d", 
+                material.getFechaIngreso().getDay(),
+                material.getFechaIngreso().getMonth(),
+                material.getFechaIngreso().getYear());
+            
+            String info = String.format("ID: %d | Tipo: %s | Nombre: %s | Fecha Ingreso: %s",
+                material.getId(), tipoMaterial, nombreMaterial, fechaIngreso);
+            materialesInfo.add(info);
+        }
+        
+        return materialesInfo;
+    }
+    
     
 }
 

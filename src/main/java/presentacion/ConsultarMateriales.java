@@ -44,7 +44,7 @@ public class ConsultarMateriales extends JPanel {
         panelCentral.add(tituloTabla, BorderLayout.NORTH);
         
         // Tabla
-        String[] columnas = {"ID", "Tipo", "Nombre"};
+        String[] columnas = {"ID", "Tipo", "Nombre", "Fecha Ingreso"};
         modelMateriales = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -59,7 +59,8 @@ public class ConsultarMateriales extends JPanel {
         // Configurar ancho de columnas
         tablaMateriales.getColumnModel().getColumn(0).setPreferredWidth(50);
         tablaMateriales.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tablaMateriales.getColumnModel().getColumn(2).setPreferredWidth(400);
+        tablaMateriales.getColumnModel().getColumn(2).setPreferredWidth(300);
+        tablaMateriales.getColumnModel().getColumn(3).setPreferredWidth(120);
         
         JScrollPane scrollPane = new JScrollPane(tablaMateriales);
         panelCentral.add(scrollPane, BorderLayout.CENTER);
@@ -146,7 +147,7 @@ public class ConsultarMateriales extends JPanel {
             List<String> materiales = controlador.listarMateriales();
             
             if (materiales.isEmpty()) {
-                modelMateriales.addRow(new Object[]{"", "", "No hay materiales registrados en el sistema."});
+                modelMateriales.addRow(new Object[]{"", "", "No hay materiales registrados en el sistema.", ""});
             } else {
                 for (String material : materiales) {
                     // Parsear la información del material
@@ -154,6 +155,7 @@ public class ConsultarMateriales extends JPanel {
                     String id = partes[0].replace("ID: ", "");
                     String tipo = partes[1].replace("Tipo: ", "");
                     String nombre = partes[2].replace("Título: ", "").replace("Descripción: ", "");
+                    String fechaIngreso = partes[3].replace("Fecha Ingreso: ", "");
                     
                     // Mejorar formato del tipo
                     if (tipo.equals("LIBRO")) {
@@ -162,7 +164,7 @@ public class ConsultarMateriales extends JPanel {
                         tipo = "[ARTÍCULO]";
                     }
                     
-                    modelMateriales.addRow(new Object[]{id, tipo, nombre});
+                    modelMateriales.addRow(new Object[]{id, tipo, nombre, fechaIngreso});
                 }
             }
             

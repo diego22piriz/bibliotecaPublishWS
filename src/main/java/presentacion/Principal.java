@@ -213,10 +213,18 @@ public class Principal extends JFrame {
             }
         });
         
+        JMenuItem itemConsultarPorFechas = createPopupMenuItem("Consultar Materiales por Rango de Fechas", new Color(155, 89, 182));
+        itemConsultarPorFechas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarConsultarPorFechas();
+            }
+        });
+        
         popup.add(itemConsultarMateriales);
         popup.add(itemListarPrestamosLector);
         popup.add(itemListarPrestamosBibliotecario);
         popup.add(itemAnalizarPrestamos);
+        popup.add(itemConsultarPorFechas);
         
         return popup;
     }
@@ -308,6 +316,13 @@ public class Principal extends JFrame {
     private void mostrarAnalizarPrestamos() {
         panelCentral.removeAll();
         panelCentral.add(new MaterialesPendientes(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+    
+    private void mostrarConsultarPorFechas() {
+        panelCentral.removeAll();
+        panelCentral.add(new ConsultarMaterialesPorFechas(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
     }

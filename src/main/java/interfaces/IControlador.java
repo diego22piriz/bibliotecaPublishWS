@@ -42,4 +42,7 @@ public interface IControlador {
     
     // Métodos para análisis de préstamos
     List<String> obtenerMaterialesConPrestamosPendientes();
+    
+    // Métodos para consultas por fechas
+    List<String> obtenerMaterialesPorRangoFechas(datatypes.DtFecha fechaInicio, datatypes.DtFecha fechaFin);
 }
