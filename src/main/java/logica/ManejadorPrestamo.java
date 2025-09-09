@@ -109,14 +109,13 @@ public class ManejadorPrestamo {
             .collect(Collectors.toList());
     }
 
-    // Obtener cantidad de préstamos para una zona específica
-    public ZonaPrestamosDTO obtenerPrestamosPorZona(String zona) {
+    // Obtener todos los préstamos de una zona específica
+    public List<Prestamo> obtenerPrestamosDeZona(String zona) {
         EntityManager em = Conexion.getInstancia().getEntityManager();
-        TypedQuery<Long> query = em.createQuery(
-            "SELECT COUNT(p) FROM Prestamo p JOIN p.lector l WHERE l.redBiblioteca = :zona", Long.class);
+        TypedQuery<Prestamo> query = em.createQuery(
+            "SELECT p FROM Prestamo p JOIN p.lector l WHERE l.redBiblioteca = :zona", Prestamo.class);
         query.setParameter("zona", zona);
-        Long cantidad = query.getSingleResult();
-        return new ZonaPrestamosDTO(zona, cantidad);
+        return query.getResultList();
     }
 
     // Obtener todas las zonas (para el selector)

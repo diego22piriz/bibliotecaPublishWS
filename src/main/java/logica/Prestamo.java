@@ -114,6 +114,10 @@ public class Prestamo implements Serializable {
         return this.material;
     }
 
+    public Bibliotecario getBibliotecario() {
+        return this.bibliotecario;
+    }
+
     // Setters para la clave compuesta
     public void setLectorCorreo(String lectorCorreo) {
         this.lectorCorreo = lectorCorreo;
