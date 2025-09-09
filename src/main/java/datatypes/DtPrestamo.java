@@ -20,6 +20,13 @@ public class DtPrestamo {
         this.fechaDevolucion = fechaDevolucion;
         this.estado = estado;
     }
+
+    public DtPrestamo(DtFecha fechaSolicitud, DtFecha fechaEstDev, EstadoPrestamo estado) {
+        this.fechaSolicitud = fechaSolicitud;
+        this.fechaDevolucion = fechaEstDev;
+        this.estado = estado;
+    }
+
     
     // Getters y setters para todos los campos
     public String getLectorCorreo() { return lectorCorreo; }

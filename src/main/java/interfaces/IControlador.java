@@ -35,6 +35,18 @@ public interface IControlador {
     
     // Métodos para gestión de préstamos
     List<Prestamo> listarPrestamos();
+    List<Prestamo> listarPrestamosLector(String correo);
+    List<Prestamo> listarPrestamosBibliotecario(String correo);
     Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId);
     void actualizarPrestamo(DtPrestamo dtPrestamo);
+    
+    // Métodos para análisis de préstamos
+    List<String> obtenerMaterialesConPrestamosPendientes();
+    
+    // Métodos para consultas por fechas
+    List<String> obtenerMaterialesPorRangoFechas(datatypes.DtFecha fechaInicio, datatypes.DtFecha fechaFin);
+    
+    // Métodos para consultas por zona
+    List<String> obtenerTodasLasZonas();
+    List<Prestamo> obtenerPrestamosDeZona(String zona);
 }

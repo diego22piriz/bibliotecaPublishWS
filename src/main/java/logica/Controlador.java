@@ -168,6 +168,14 @@ public class Controlador implements IControlador {
         return ManejadorPrestamo.getInstancia().listarPrestamos();
     }
     
+    public List<Prestamo> listarPrestamosLector(String correo) {
+        return ManejadorPrestamo.getInstancia().listarPrestamosLector(correo);
+    }
+
+    public List<Prestamo> listarPrestamosBibliotecario(String correo) {
+        return ManejadorPrestamo.getInstancia().listarPrestamosBibliotecario(correo);
+    }
+
     public Prestamo buscarPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId) {
         return ManejadorPrestamo.getInstancia().buscarPrestamo(lectorCorreo, bibliotecarioCorreo, materialId);
     }
@@ -204,6 +212,74 @@ public class Controlador implements IControlador {
         }
     }
     
+    // Método para obtener materiales con muchos préstamos pendientes
+    public List<String> obtenerMaterialesConPrestamosPendientes() {
+        List<Object[]> resultados = manejadorMaterial.obtenerMaterialesConPrestamosPendientes();
+        List<String> materialesInfo = new ArrayList<>();
+        
+        for (Object[] resultado : resultados) {
+            Long materialId = (Long) resultado[0];
+            Long cantidadPrestamos = (Long) resultado[1];
+            
+            // Buscar el material completo por ID
+            Material material = manejadorMaterial.buscarMaterial(materialId);
+            if (material == null) {
+                continue; // Saltar si no se encuentra el material
+            }
+            
+            String tipoMaterial = material instanceof Libro ? "LIBRO" : "ARTÍCULO";
+            String nombreMaterial;
+            
+            if (material instanceof Libro) {
+                nombreMaterial = ((Libro) material).getTitulo();
+            } else {
+                nombreMaterial = ((Articulo) material).getDescripcion();
+            }
+            
+            String info = String.format("ID: %d | Tipo: %s | Nombre: %s | Préstamos Pendientes: %d",
+                material.getId(), tipoMaterial, nombreMaterial, cantidadPrestamos);
+            materialesInfo.add(info);
+        }
+        
+        return materialesInfo;
+    }
+    
+    // Método para obtener materiales registrados en un rango de fechas
+    public List<String> obtenerMaterialesPorRangoFechas(datatypes.DtFecha fechaInicio, datatypes.DtFecha fechaFin) {
+        List<Material> materiales = manejadorMaterial.obtenerMaterialesPorRangoFechas(fechaInicio, fechaFin);
+        List<String> materialesInfo = new ArrayList<>();
+        
+        for (Material material : materiales) {
+            String tipoMaterial = material instanceof Libro ? "LIBRO" : "ARTÍCULO";
+            String nombreMaterial;
+            
+            if (material instanceof Libro) {
+                nombreMaterial = ((Libro) material).getTitulo();
+            } else {
+                nombreMaterial = ((Articulo) material).getDescripcion();
+            }
+            
+            String fechaIngreso = String.format("%02d/%02d/%04d", 
+                material.getFechaIngreso().getDay(),
+                material.getFechaIngreso().getMonth(),
+                material.getFechaIngreso().getYear());
+            
+            String info = String.format("ID: %d | Tipo: %s | Nombre: %s | Fecha Ingreso: %s",
+                material.getId(), tipoMaterial, nombreMaterial, fechaIngreso);
+            materialesInfo.add(info);
+        }
+        
+        return materialesInfo;
+    }
+    
+    // Métodos para consultas por zona
+    public List<String> obtenerTodasLasZonas() {
+        return ManejadorPrestamo.getInstancia().obtenerTodasLasZonas();
+    }
+    
+    public List<Prestamo> obtenerPrestamosDeZona(String zona) {
+        return ManejadorPrestamo.getInstancia().obtenerPrestamosDeZona(zona);
+    }
 }
 
 

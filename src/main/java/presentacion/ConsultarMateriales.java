@@ -1,6 +1,7 @@
 package presentacion;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,8 +11,8 @@ import interfaces.IControlador;
 public class ConsultarMateriales extends JPanel {
     
     private IControlador controlador;
-    private JList<String> listaMateriales;
-    private DefaultListModel<String> modeloLista;
+    private JTable tablaMateriales;
+    private DefaultTableModel modelMateriales;
     private JButton btnActualizar;
     private JButton btnVolver;
     
@@ -31,37 +32,37 @@ public class ConsultarMateriales extends JPanel {
         tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(tituloLabel, BorderLayout.NORTH);
         
-        // Panel central con la lista
+        // Panel central con la tabla
         JPanel panelCentral = new JPanel(new BorderLayout());
         panelCentral.setBackground(Color.WHITE);
         panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         
-        // Modelo de lista
-        modeloLista = new DefaultListModel<>();
-        listaMateriales = new JList<>(modeloLista);
-        listaMateriales.setFont(new Font("Arial", Font.PLAIN, 14));
-        listaMateriales.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaMateriales.setBackground(new Color(255, 255, 255));
-        listaMateriales.setSelectionBackground(new Color(52, 152, 219));
-        listaMateriales.setSelectionForeground(Color.WHITE);
-        listaMateriales.setFixedCellHeight(40);
-        listaMateriales.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        // Título de la tabla
+        JLabel tituloTabla = new JLabel("Lista de Materiales (Libros y Artículos)");
+        tituloTabla.setFont(new Font("Arial", Font.BOLD, 14));
+        tituloTabla.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentral.add(tituloTabla, BorderLayout.NORTH);
         
-        // Scroll pane para la lista
-        JScrollPane scrollPane = new JScrollPane(listaMateriales);
-        scrollPane.setPreferredSize(new Dimension(750, 450));
-        scrollPane.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-                "Lista de Materiales (Libros y Artículos)",
-                0, 0,
-                new Font("Arial", Font.BOLD, 14),
-                new Color(44, 62, 80)
-            ),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
-        scrollPane.setBackground(Color.WHITE);
+        // Tabla
+        String[] columnas = {"ID", "Tipo", "Nombre", "Fecha Ingreso"};
+        modelMateriales = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         
+        tablaMateriales = new JTable(modelMateriales);
+        tablaMateriales.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tablaMateriales.getTableHeader().setReorderingAllowed(false);
+        
+        // Configurar ancho de columnas
+        tablaMateriales.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tablaMateriales.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tablaMateriales.getColumnModel().getColumn(2).setPreferredWidth(300);
+        tablaMateriales.getColumnModel().getColumn(3).setPreferredWidth(120);
+        
+        JScrollPane scrollPane = new JScrollPane(tablaMateriales);
         panelCentral.add(scrollPane, BorderLayout.CENTER);
         
         // Panel de botones
@@ -115,7 +116,7 @@ public class ConsultarMateriales extends JPanel {
         // Event listeners
         btnActualizar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                actualizarLista();
+                actualizarTabla();
             }
         });
         
@@ -126,7 +127,7 @@ public class ConsultarMateriales extends JPanel {
         });
         
         // Cargar datos iniciales
-        actualizarLista();
+        actualizarTabla();
     }
     
     private void addHoverEffect(JButton button, Color originalColor) {
@@ -140,20 +141,30 @@ public class ConsultarMateriales extends JPanel {
         });
     }
     
-    private void actualizarLista() {
+    private void actualizarTabla() {
         try {
-            modeloLista.clear();
+            modelMateriales.setRowCount(0);
             List<String> materiales = controlador.listarMateriales();
             
             if (materiales.isEmpty()) {
-                modeloLista.addElement("No hay materiales registrados en el sistema.");
+                modelMateriales.addRow(new Object[]{"", "", "No hay materiales registrados en el sistema.", ""});
             } else {
                 for (String material : materiales) {
-                    // Mejorar la presentación de cada elemento con mejor formato
-                    String elementoMejorado = material
-                        .replace("Tipo: LIBRO", "[LIBRO]")
-                        .replace("Tipo: ARTÍCULO", "[ARTÍCULO]");
-                    modeloLista.addElement(elementoMejorado);
+                    // Parsear la información del material
+                    String[] partes = material.split(" \\| ");
+                    String id = partes[0].replace("ID: ", "");
+                    String tipo = partes[1].replace("Tipo: ", "");
+                    String nombre = partes[2].replace("Título: ", "").replace("Descripción: ", "");
+                    String fechaIngreso = partes[3].replace("Fecha Ingreso: ", "");
+                    
+                    // Mejorar formato del tipo
+                    if (tipo.equals("LIBRO")) {
+                        tipo = "[LIBRO]";
+                    } else if (tipo.equals("ARTÍCULO")) {
+                        tipo = "[ARTÍCULO]";
+                    }
+                    
+                    modelMateriales.addRow(new Object[]{id, tipo, nombre, fechaIngreso});
                 }
             }
             
@@ -175,7 +186,7 @@ public class ConsultarMateriales extends JPanel {
         Container parent = getParent();
         if (parent != null) {
             parent.removeAll();
-            parent.add(new Consultas());
+            parent.add(new Inicio());
             parent.revalidate();
             parent.repaint();
         }

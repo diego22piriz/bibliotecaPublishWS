@@ -88,11 +88,17 @@ public class Principal extends JFrame {
             }
         });
         
-        // Botón Consultas
+        // Botón Consultas con menú desplegable
         JButton btnConsultas = createMenuButton("Consultas", new Color(155, 89, 182));
+        JPopupMenu popupConsultas = createConsultasPopup();
+        
         btnConsultas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mostrarConsultas();
+                if (popupConsultas.isVisible()) {
+                    popupConsultas.setVisible(false);
+                } else {
+                    popupConsultas.show(btnConsultas, 0, btnConsultas.getHeight());
+                }
             }
         });
         
@@ -174,6 +180,63 @@ public class Principal extends JFrame {
         return popup;
     }
     
+    private JPopupMenu createConsultasPopup() {
+        JPopupMenu popup = new JPopupMenu();
+        popup.setBackground(Color.WHITE);
+        popup.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        
+        JMenuItem itemConsultarMateriales = createPopupMenuItem("Consultar Materiales", new Color(155, 89, 182));
+        itemConsultarMateriales.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarConsultarMateriales();
+            }
+        });
+        
+        JMenuItem itemListarPrestamosLector = createPopupMenuItem("Listar Préstamos de un Lector", new Color(155, 89, 182));
+        itemListarPrestamosLector.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarListarPrestamosLector();
+            }
+        });
+        
+        JMenuItem itemListarPrestamosBibliotecario = createPopupMenuItem("Listar Préstamos de un Bibliotecario", new Color(155, 89, 182));
+        itemListarPrestamosBibliotecario.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarListarPrestamosBibliotecario();
+            }
+        });
+        
+        JMenuItem itemAnalizarPrestamos = createPopupMenuItem("Materiales con muchos (+3) Préstamos Pendientes", new Color(155, 89, 182));
+        itemAnalizarPrestamos.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarAnalizarPrestamos();
+            }
+        });
+        
+        JMenuItem itemConsultarPorFechas = createPopupMenuItem("Consultar Materiales por Rango de Fechas", new Color(155, 89, 182));
+        itemConsultarPorFechas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarConsultarPorFechas();
+            }
+        });
+        
+        JMenuItem itemPrestamosPorZona = createPopupMenuItem("Préstamos por Zona", new Color(155, 89, 182));
+        itemPrestamosPorZona.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPrestamosPorZona();
+            }
+        });
+        
+        popup.add(itemConsultarMateriales);
+        popup.add(itemListarPrestamosLector);
+        popup.add(itemListarPrestamosBibliotecario);
+        popup.add(itemAnalizarPrestamos);
+        popup.add(itemConsultarPorFechas);
+        popup.add(itemPrestamosPorZona);
+        
+        return popup;
+    }
+    
     private JPopupMenu createGestionesPopup() {
         JPopupMenu popup = new JPopupMenu();
         popup.setBackground(Color.WHITE);
@@ -186,32 +249,15 @@ public class Principal extends JFrame {
             }
         });
         
-        JMenuItem itemGestionarMaterial = createPopupMenuItem("Gestionar Material", new Color(231, 76, 60));
-        itemGestionarMaterial.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mostrarGestionarMaterial();
-            }
-        });
-        
         JMenuItem itemGestionarPrestamo = createPopupMenuItem("Gestionar Préstamo", new Color(231, 76, 60));
         itemGestionarPrestamo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mostrarGestionarPrestamo();
             }
         });
-        
-        JMenuItem itemGestionarDevolucion = createPopupMenuItem("Gestionar Devolución", new Color(231, 76, 60));
-        itemGestionarDevolucion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mostrarGestionarDevolucion();
-            }
-        });
-        
+
         popup.add(itemGestionarUsuario);
-        popup.add(itemGestionarMaterial);
         popup.add(itemGestionarPrestamo);
-        popup.add(itemGestionarDevolucion);
-        
         return popup;
     }
     
@@ -244,9 +290,38 @@ public class Principal extends JFrame {
         panelCentral.repaint();
     }
     
-    private void mostrarConsultas() {
+    
+    private void mostrarConsultarMateriales() {
         panelCentral.removeAll();
-        panelCentral.add(new Consultas());
+        panelCentral.add(new ConsultarMateriales(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+    
+    private void mostrarListarPrestamosLector() {
+        panelCentral.removeAll();
+        panelCentral.add(new ListarPrestamosLector(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+    
+    private void mostrarListarPrestamosBibliotecario() {
+        panelCentral.removeAll();
+        panelCentral.add(new ListarPrestamosBibliotecario(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+    
+    private void mostrarAnalizarPrestamos() {
+        panelCentral.removeAll();
+        panelCentral.add(new MaterialesPendientes(controlador, panelCentral));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
+    
+    private void mostrarConsultarPorFechas() {
+        panelCentral.removeAll();
+        panelCentral.add(new ConsultarMaterialesPorFechas(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
     }
@@ -279,25 +354,17 @@ public class Principal extends JFrame {
         panelCentral.repaint();
     }
     
-    private void mostrarGestionarMaterial() {
-        panelCentral.removeAll();
-        panelCentral.add(new GestionarMaterial(controlador, panelCentral));
-        panelCentral.revalidate();
-        panelCentral.repaint();
-    }
-    
     private void mostrarGestionarPrestamo() {
         panelCentral.removeAll();
-        panelCentral.add(new GestionarPrestamo(controlador, panelCentral));
-        panelCentral.revalidate();
-        panelCentral.repaint();
-    }
-    
-    private void mostrarGestionarDevolucion() {
-        panelCentral.removeAll();
-        panelCentral.add(new GestionarDevolucion(controlador, panelCentral));
+        panelCentral.add(new ActualizarPrestamo(controlador, panelCentral));
         panelCentral.revalidate();
         panelCentral.repaint();
     }
 
+    private void mostrarPrestamosPorZona() {
+        panelCentral.removeAll();
+        panelCentral.add(new PrestamosPorZonaPanel(controlador));
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }
 }

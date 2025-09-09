@@ -2,6 +2,7 @@ package logica;
 
 import datatypes.RedBiblioteca;
 import datatypes.DtFecha;
+import datatypes.DtPrestamo;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,4 +100,5 @@ public class Lector extends Usuario {
         this.prestamos.remove(prestamo);
         prestamo.setLector(null);
     }
+
 }

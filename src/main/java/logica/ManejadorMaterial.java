@@ -68,9 +68,15 @@ public class ManejadorMaterial {
         @SuppressWarnings("unchecked")
         List<Libro> listLibros = (List<Libro>) queryLibros.getResultList();
         for (Libro libro : listLibros) {
-            String info = String.format("ID: %d | Tipo: LIBRO | Título: %s",
+            String fechaIngreso = String.format("%02d/%02d/%04d", 
+                libro.getFechaIngreso().getDay(),
+                libro.getFechaIngreso().getMonth(),
+                libro.getFechaIngreso().getYear());
+            
+            String info = String.format("ID: %d | Tipo: LIBRO | Título: %s | Fecha Ingreso: %s",
                 libro.getId(),
-                libro.getTitulo()
+                libro.getTitulo(),
+                fechaIngreso
             );
             aRetornar.add(info);
         }
@@ -80,9 +86,15 @@ public class ManejadorMaterial {
         @SuppressWarnings("unchecked")
         List<Articulo> listArticulos = (List<Articulo>) queryArticulos.getResultList();
         for (Articulo articulo : listArticulos) {
-            String info = String.format("ID: %d | Tipo: ARTÍCULO | Descripción: %s",
+            String fechaIngreso = String.format("%02d/%02d/%04d", 
+                articulo.getFechaIngreso().getDay(),
+                articulo.getFechaIngreso().getMonth(),
+                articulo.getFechaIngreso().getYear());
+            
+            String info = String.format("ID: %d | Tipo: ARTÍCULO | Descripción: %s | Fecha Ingreso: %s",
                 articulo.getId(),
-                articulo.getDescripcion()
+                articulo.getDescripcion(),
+                fechaIngreso
             );
             aRetornar.add(info);
         }
@@ -128,5 +140,55 @@ public class ManejadorMaterial {
         javax.persistence.Query query = em.createQuery("SELECT a FROM Articulo a");
         return query.getResultList();
     }
+    
+    // Obtener materiales con 3 o más préstamos pendientes ordenados por cantidad
+    public List<Object[]> obtenerMaterialesConPrestamosPendientes() {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        
+        // Consulta para obtener materiales con 3 o más préstamos pendientes, contando la cantidad
+        Query query = em.createQuery(
+            "SELECT p.material.id, COUNT(p) " +
+            "FROM Prestamo p " +
+            "WHERE p.estado = :estadoPendiente " +
+            "GROUP BY p.material.id " +
+            "HAVING COUNT(p) >= 3 " +
+            "ORDER BY COUNT(p) DESC"
+        );
+        query.setParameter("estadoPendiente", datatypes.EstadoPrestamo.PENDIENTE);
+        
+        @SuppressWarnings("unchecked")
+        List<Object[]> resultados = query.getResultList();
+        return resultados;
+    }
+    
+    // Obtener materiales registrados en un rango de fechas
+    public List<Material> obtenerMaterialesPorRangoFechas(datatypes.DtFecha fechaInicio, datatypes.DtFecha fechaFin) {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        
+        // Consulta para obtener materiales registrados entre las fechas especificadas
+        Query query = em.createQuery(
+            "SELECT m FROM Material m " +
+            "WHERE m.fechaIngreso.year >= :añoInicio AND m.fechaIngreso.year <= :añoFin " +
+            "AND ((m.fechaIngreso.year > :añoInicio) OR " +
+            "     (m.fechaIngreso.year = :añoInicio AND m.fechaIngreso.month > :mesInicio) OR " +
+            "     (m.fechaIngreso.year = :añoInicio AND m.fechaIngreso.month = :mesInicio AND m.fechaIngreso.day >= :diaInicio)) " +
+            "AND ((m.fechaIngreso.year < :añoFin) OR " +
+            "     (m.fechaIngreso.year = :añoFin AND m.fechaIngreso.month < :mesFin) OR " +
+            "     (m.fechaIngreso.year = :añoFin AND m.fechaIngreso.month = :mesFin AND m.fechaIngreso.day <= :diaFin)) " +
+            "ORDER BY m.fechaIngreso.year, m.fechaIngreso.month, m.fechaIngreso.day"
+        );
+        
+        query.setParameter("añoInicio", fechaInicio.getYear());
+        query.setParameter("mesInicio", fechaInicio.getMonth());
+        query.setParameter("diaInicio", fechaInicio.getDay());
+        query.setParameter("añoFin", fechaFin.getYear());
+        query.setParameter("mesFin", fechaFin.getMonth());
+        query.setParameter("diaFin", fechaFin.getDay());
+        
+        @SuppressWarnings("unchecked")
+        List<Material> resultados = query.getResultList();
+        return resultados;
+    }
+    
     
 }
