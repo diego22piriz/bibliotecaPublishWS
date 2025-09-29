@@ -9,8 +9,8 @@ public class DtLector extends DtUsuario {
     private RedBiblioteca redBiblioteca;
 
     // Constructor con parámetros
-    public DtLector(String nombre, String correo, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
-		super(nombre, correo);
+    public DtLector(String nombre, String correo, String password, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
+		super(nombre, correo, password);
         this.direccion = direccion;
         this.fechaRegistro = fechaRegistro;
         this.activo = activo;

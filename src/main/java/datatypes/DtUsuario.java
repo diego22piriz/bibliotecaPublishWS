@@ -4,12 +4,14 @@ public abstract class DtUsuario {
 
     private String correo;
     private String nombre;
+    private String password;
 
     // Constructor con parámetros
-    protected DtUsuario(String nombre, String correo) {
+    protected DtUsuario(String nombre, String correo, String password) {
         super();
         this.nombre = nombre;
         this.correo = correo;
+        this.password = password;
     }
 
     // Getters
@@ -19,5 +21,9 @@ public abstract class DtUsuario {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

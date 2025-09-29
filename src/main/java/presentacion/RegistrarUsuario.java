@@ -48,6 +48,10 @@ public class RegistrarUsuario extends JPanel {
         JLabel lblCorreo = new JLabel("Correo:");
         lblCorreo.setFont(new Font("Arial", Font.BOLD, 12));
         JTextField txtCorreo = new JTextField(20);
+
+        JLabel lblPassword = new JLabel("Contraseña:");
+        lblPassword.setFont(new Font("Arial", Font.BOLD, 12));
+        JTextField txtPassword = new JTextField(20);
         
         // Campo Tipo de Usuario
         JLabel lblTipo = new JLabel("Tipo de Usuario:");
@@ -60,6 +64,7 @@ public class RegistrarUsuario extends JPanel {
         camposBasicos.add(txtNombre);
         camposBasicos.add(lblCorreo);
         camposBasicos.add(txtCorreo);
+        camposBasicos.add(txtPassword);
         camposBasicos.add(lblTipo);
         camposBasicos.add(cmbTipo);
         
@@ -140,7 +145,7 @@ public class RegistrarUsuario extends JPanel {
         JButton btnRegistrar = createActionButton("Registrar Usuario", new Color(46, 204, 113));
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                registrarUsuario(txtNombre.getText(), txtCorreo.getText(), 
+                registrarUsuario(txtNombre.getText(), txtCorreo.getText(), txtPassword.getText(),
                                (String)cmbTipo.getSelectedItem(), txtDireccion.getText(),
                                txtDia.getText(), txtMes.getText(), txtAnio.getText(),
                                chkActivo.isSelected(), (String)cmbZona.getSelectedItem());
@@ -187,7 +192,7 @@ public class RegistrarUsuario extends JPanel {
     }
     
     // Método para manejar el registro de usuario
-    private void registrarUsuario(String nombre, String correo, String tipo, String direccion, 
+    private void registrarUsuario(String nombre, String correo, String password, String tipo, String direccion, 
                                 String diaStr, String mesStr, String anioStr, boolean activo, String zona) {
         if (nombre == null || nombre.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
@@ -211,11 +216,11 @@ public class RegistrarUsuario extends JPanel {
 
                 datatypes.DtFecha fecha = new datatypes.DtFecha(dia, mes, anio);
                 datatypes.RedBiblioteca zonaEnum = datatypes.RedBiblioteca.valueOf(zona);
-                datatypes.DtLector dtLector = new datatypes.DtLector(nombre, correo, direccion, fecha, activo, zonaEnum);
+                datatypes.DtLector dtLector = new datatypes.DtLector(nombre, correo, password, direccion, fecha, activo, zonaEnum);
                 controlador.agregarLector(dtLector);
             } else if ("Bibliotecario".equals(tipo)) {
                 // numeroEmpleado se genera automáticamente en la BD
-                datatypes.DtBibliotecario dtBibliotecario = new datatypes.DtBibliotecario(nombre, correo);
+                datatypes.DtBibliotecario dtBibliotecario = new datatypes.DtBibliotecario(nombre, correo, password);
                 controlador.agregarBibliotecario(dtBibliotecario);
             }
 
