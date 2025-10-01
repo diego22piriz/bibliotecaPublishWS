@@ -18,8 +18,8 @@ public class Bibliotecario extends Usuario {
         super(); 
     }
 
-    public Bibliotecario(String nombre, String correo) {
-        super(nombre, correo);
+    public Bibliotecario(String nombre, String correo, String password) {
+        super(nombre, correo, password);
     }
 
     @OneToMany(mappedBy = "bibliotecario", cascade = CascadeType.ALL)
