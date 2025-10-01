@@ -69,9 +69,7 @@ public class Controlador implements IControlador {
         }
     }
 
-        
-       
-       
+
     // Métodos para materiales
     public void agregarLibro(DtLibro dtLibro) {
         manejadorMaterial.agregarLibro(dtLibro);
