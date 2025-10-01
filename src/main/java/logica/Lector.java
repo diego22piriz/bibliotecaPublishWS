@@ -40,8 +40,8 @@ public class Lector extends Usuario {
     }
 
     // Constructor con parámetros
-    public Lector(String nombre, String correo, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
-		super(nombre, correo);
+    public Lector(String nombre, String correo, String password, String direccion, DtFecha fechaRegistro, boolean activo, RedBiblioteca redBiblioteca) {
+		super(nombre, correo, password);
         this.direccion = direccion;
         this.fechaRegistro = fechaRegistro;
         this.activo = activo;

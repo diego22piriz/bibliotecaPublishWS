@@ -30,6 +30,7 @@ public class ManejadorUsuario {
         Lector lector = new Lector(
             dtLector.getNombre(),
             dtLector.getCorreo(),
+            dtLector.getPassword(),
             dtLector.getDireccion(),
             dtLector.getFechaRegistro(),
             dtLector.getActivo(),
@@ -43,7 +44,8 @@ public class ManejadorUsuario {
         em.getTransaction().begin();
         Bibliotecario bibliotecario = new Bibliotecario(
             dtBibliotecario.getNombre(),
-            dtBibliotecario.getCorreo()
+            dtBibliotecario.getCorreo(),
+            dtBibliotecario.getPassword()
         );
         em.persist(bibliotecario);
         em.getTransaction().commit();
