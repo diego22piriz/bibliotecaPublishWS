@@ -27,6 +27,10 @@ public class Principal extends JFrame {
     }
     
     public Principal() {
+        // Publicar Web Service
+        publicadores.ControladorPublish cp = new publicadores.ControladorPublish();
+        cp.publicar();
+        
         initialize();
     }
     
