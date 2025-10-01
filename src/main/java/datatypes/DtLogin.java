@@ -9,7 +9,6 @@ public class DtLogin {
 
     // Constructor con parámetros
     public DtLogin(String correo, String password) {
-		super();
         this.correo = correo;
         this.password = password;
 	}

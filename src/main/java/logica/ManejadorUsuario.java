@@ -8,6 +8,7 @@ import datatypes.RedBiblioteca;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
 import java.util.List;
+import datatypes.DtUsuario;
 
 public class ManejadorUsuario {
     
@@ -102,5 +103,39 @@ public class ManejadorUsuario {
     public List<String> listarBibliotecarios() {
         Query query = em.createQuery("SELECT b.correo FROM Bibliotecario b");
         return query.getResultList();
+    }
+
+    public DtUsuario login(String correo, String password) {
+        Usuario usuario = em.find(Usuario.class, correo);
+        if (usuario != null) {
+            if (!usuario.getPassword().equals(password)) {
+                return null; // Contraseña incorrecta
+            }
+            else {
+                // Si es Lector
+                if (usuario instanceof Lector) {
+                    Lector lector = (Lector) usuario;
+                    return new DtLector(
+                        lector.getNombre(),
+                        lector.getCorreo(),
+                        lector.getPassword(),
+                        lector.getDireccion(),
+                        lector.getFechaRegistro(),
+                        lector.getActivo(),
+                        lector.getRedBiblioteca()
+                    );
+                }
+                // Si es Bibliotecario
+                if (usuario instanceof Bibliotecario) {
+                    Bibliotecario bibliotecario = (Bibliotecario) usuario;
+                    return new DtBibliotecario(
+                        bibliotecario.getNombre(),
+                        bibliotecario.getCorreo(),
+                        bibliotecario.getPassword()
+                    );
+                }
+            }
+        }
+        return null; // Usuario no encontrado
     }
 }

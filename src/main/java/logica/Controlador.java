@@ -8,6 +8,7 @@ import datatypes.DtLector;
 import javax.swing.JOptionPane;
 import datatypes.DtLibro;
 import datatypes.DtPrestamo;
+import datatypes.DtUsuario;
 import datatypes.DtArticulo;
 import persistencia.Conexion;
 import javax.persistence.EntityManager;
@@ -277,6 +278,10 @@ public class Controlador implements IControlador {
     
     public List<Prestamo> obtenerPrestamosDeZona(String zona) {
         return ManejadorPrestamo.getInstancia().obtenerPrestamosDeZona(zona);
+    }
+
+    public DtUsuario login(String correo, String password) {
+        return ManejadorUsuario.getInstancia().login(correo, password);
     }
 }
 
