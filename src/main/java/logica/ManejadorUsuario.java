@@ -62,11 +62,12 @@ public class ManejadorUsuario {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
         em.getTransaction().begin();
-        Usuario lector = em.find(Usuario.class, correo);
-        ((Lector)lector).setActivo(false);
+        Usuario usuario = em.find(Usuario.class, correo);
+        if (usuario instanceof Lector) {
+            Lector lector = (Lector) usuario;
+            lector.setActivo(!lector.getActivo()); // alternar estado
+        }
         em.getTransaction().commit();
-        
-
     }
     public Usuario getUsuario(String correo) {
         Conexion conexion = Conexion.getInstancia();
