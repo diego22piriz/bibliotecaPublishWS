@@ -18,7 +18,7 @@ import interfaces.Fabrica;
 import interfaces.IControlador;
 
 @WebService
-@SOAPBinding(style = Style.RPC, parameterStyle = ParameterStyle.WRAPPED)
+@SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.WRAPPED)
 public class ControladorPublish {
 	private Fabrica fabrica;
 	private IControlador icon;

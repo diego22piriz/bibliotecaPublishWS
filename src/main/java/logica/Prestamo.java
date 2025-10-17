@@ -25,17 +25,17 @@ public class Prestamo implements Serializable {
     
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "day", column = @Column(name = "fecha_solicitud_dia")),
-        @AttributeOverride(name = "month", column = @Column(name = "fecha_solicitud_mes")),
-        @AttributeOverride(name = "year", column = @Column(name = "fecha_solicitud_anio"))
+        @AttributeOverride(name = "dia", column = @Column(name = "fecha_solicitud_dia")),
+        @AttributeOverride(name = "mes", column = @Column(name = "fecha_solicitud_mes")),
+        @AttributeOverride(name = "anio", column = @Column(name = "fecha_solicitud_anio"))
     })
     private DtFecha fechaSolicitud;
     
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "day", column = @Column(name = "fecha_est_dev_dia")),
-        @AttributeOverride(name = "month", column = @Column(name = "fecha_est_dev_mes")),
-        @AttributeOverride(name = "year", column = @Column(name = "fecha_est_dev_anio"))
+        @AttributeOverride(name = "dia", column = @Column(name = "fecha_est_dev_dia")),
+        @AttributeOverride(name = "mes", column = @Column(name = "fecha_est_dev_mes")),
+        @AttributeOverride(name = "anio", column = @Column(name = "fecha_est_dev_anio"))
     })
     private DtFecha fechaEstDev;
     

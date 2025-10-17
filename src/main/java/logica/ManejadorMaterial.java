@@ -68,10 +68,15 @@ public class ManejadorMaterial {
         @SuppressWarnings("unchecked")
         List<Libro> listLibros = (List<Libro>) queryLibros.getResultList();
         for (Libro libro : listLibros) {
-            String fechaIngreso = String.format("%02d/%02d/%04d", 
-                libro.getFechaIngreso().getDay(),
-                libro.getFechaIngreso().getMonth(),
-                libro.getFechaIngreso().getYear());
+            String fechaIngreso;
+            if (libro.getFechaIngreso() != null) {
+                fechaIngreso = String.format("%02d/%02d/%04d", 
+                    libro.getFechaIngreso().getDay(),
+                    libro.getFechaIngreso().getMonth(),
+                    libro.getFechaIngreso().getYear());
+            } else {
+                fechaIngreso = "No especificada";
+            }
             
             String info = String.format("ID: %d | Tipo: LIBRO | Título: %s | Fecha Ingreso: %s",
                 libro.getId(),
@@ -86,10 +91,15 @@ public class ManejadorMaterial {
         @SuppressWarnings("unchecked")
         List<Articulo> listArticulos = (List<Articulo>) queryArticulos.getResultList();
         for (Articulo articulo : listArticulos) {
-            String fechaIngreso = String.format("%02d/%02d/%04d", 
-                articulo.getFechaIngreso().getDay(),
-                articulo.getFechaIngreso().getMonth(),
-                articulo.getFechaIngreso().getYear());
+            String fechaIngreso;
+            if (articulo.getFechaIngreso() != null) {
+                fechaIngreso = String.format("%02d/%02d/%04d", 
+                    articulo.getFechaIngreso().getDay(),
+                    articulo.getFechaIngreso().getMonth(),
+                    articulo.getFechaIngreso().getYear());
+            } else {
+                fechaIngreso = "No especificada";
+            }
             
             String info = String.format("ID: %d | Tipo: ARTÍCULO | Descripción: %s | Fecha Ingreso: %s",
                 articulo.getId(),
