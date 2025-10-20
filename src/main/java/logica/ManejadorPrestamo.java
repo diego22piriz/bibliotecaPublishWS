@@ -3,6 +3,7 @@ import datatypes.DtPrestamo;
 import datatypes.RedBiblioteca;
 import javax.persistence.*;
 import persistencia.Conexion;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -95,11 +96,8 @@ public class ManejadorPrestamo {
 
     // Obtener todas las zonas (para el selector)
     public List<String> obtenerTodasLasZonas() {
-        EntityManager em = Conexion.getInstancia().getEntityManager();
-        TypedQuery<RedBiblioteca> query = em.createQuery(
-            "SELECT DISTINCT l.redBiblioteca FROM Lector l", RedBiblioteca.class);
-        List<RedBiblioteca> zonasEnum = query.getResultList();
-        return zonasEnum.stream()
+        // Devolver todos los valores del enum RedBiblioteca
+        return Arrays.stream(RedBiblioteca.values())
             .map(RedBiblioteca::name)
             .collect(Collectors.toList());
     }

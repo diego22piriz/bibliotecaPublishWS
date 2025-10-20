@@ -134,6 +134,10 @@ public class Controlador implements IControlador {
         return manejadorUsuario.listarLectores();
     }
     
+    public List<String> listarLectoresSuspendidos() {
+        return manejadorUsuario.listarLectoresSuspendidos();
+    }
+    
     public List<String> listarBibliotecarios() {
         return manejadorUsuario.listarBibliotecarios();
     }

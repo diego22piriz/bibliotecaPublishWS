@@ -101,6 +101,12 @@ public class ManejadorUsuario {
     }
     
     @SuppressWarnings("unchecked")
+    public List<String> listarLectoresSuspendidos() {
+        Query query = em.createQuery("SELECT l.correo FROM Lector l WHERE l.activo = false");
+        return query.getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
     public List<String> listarBibliotecarios() {
         Query query = em.createQuery("SELECT b.correo FROM Bibliotecario b");
         return query.getResultList();
