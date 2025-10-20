@@ -124,6 +124,21 @@ public class ControladorPublish {
 	public String[] obtenerMaterialesPorRangoFechas(DtFecha fechaInicio, DtFecha fechaFin) {
 		return icon.obtenerMaterialesPorRangoFechas(fechaInicio, fechaFin).toArray(new String[0]);
 	}
+
+	// NUEVO: listar préstamos como strings legibles
+	@WebMethod
+	public String[] listarPrestamos() {
+		java.util.List<logica.Prestamo> prestamos = icon.listarPrestamos();
+		java.util.List<String> res = new java.util.ArrayList<>();
+		for (logica.Prestamo p : prestamos) {
+			String fs = p.getFechaSolicitud() != null ? String.format("%02d/%02d/%04d", p.getFechaSolicitud().getDay(), p.getFechaSolicitud().getMonth(), p.getFechaSolicitud().getYear()) : "-";
+			String fd = p.getFechaEstDev() != null ? String.format("%02d/%02d/%04d", p.getFechaEstDev().getDay(), p.getFechaEstDev().getMonth(), p.getFechaEstDev().getYear()) : "-";
+			String line = String.format("Material %d | Lector %s | Bibliotecario %s | Estado %s | Solicitud %s | Devolución %s",
+				p.getMaterialId(), p.getLectorCorreo(), p.getBibliotecarioCorreo(), p.getEstado(), fs, fd);
+			res.add(line);
+		}
+		return res.toArray(new String[0]);
+	}
 	
 	@WebMethod
 	public String[] obtenerTodasLasZonas() {

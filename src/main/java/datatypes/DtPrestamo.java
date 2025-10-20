@@ -1,5 +1,13 @@
 package datatypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "dtPrestamo")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"bibliotecarioCorreo", "estado", "fechaDevolucion", "fechaSolicitud", "lectorCorreo", "materialId"})
 public class DtPrestamo {
     // Clave compuesta (sin ID autogenerado)
     private String lectorCorreo;
@@ -11,7 +19,11 @@ public class DtPrestamo {
     private DtFecha fechaDevolucion;
     private EstadoPrestamo estado;
     
-    // Constructor
+    // Constructor requerido por JAXB (sin parámetros)
+    public DtPrestamo() {
+    }
+
+    // Constructores de conveniencia
     public DtPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId, DtFecha fechaSolicitud, DtFecha fechaDevolucion, EstadoPrestamo estado) {
         this.lectorCorreo = lectorCorreo;
         this.bibliotecarioCorreo = bibliotecarioCorreo;
