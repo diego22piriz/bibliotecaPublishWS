@@ -29,6 +29,7 @@ public interface IControlador {
     
     // Métodos para obtener listas de datos
     List<String> listarLectores();
+    List<String> listarLectoresSuspendidos();
     List<String> listarBibliotecarios();
     ArrayList<String> listarMateriales();
     ArrayList<String> listarIdsMateriales();

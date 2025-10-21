@@ -101,6 +101,11 @@ public class ControladorPublish {
 	}
 	
 	@WebMethod
+	public String[] listarLectoresSuspendidos() {
+		return icon.listarLectoresSuspendidos().toArray(new String[0]);
+	}
+	
+	@WebMethod
 	public String[] listarBibliotecarios() {
 		return icon.listarBibliotecarios().toArray(new String[0]);
 	}

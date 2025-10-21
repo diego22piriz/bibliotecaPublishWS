@@ -5,7 +5,6 @@ import excepciones.UsuarioRepetidoException;
 import excepciones.PrestamoDuplicadoException;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
-import javax.swing.JOptionPane;
 import datatypes.DtLibro;
 import datatypes.DtPrestamo;
 import datatypes.DtUsuario;
@@ -43,15 +42,8 @@ public class Controlador implements IControlador {
     public void suspenderUsuario(String correo) {
         if (manejadorUsuario.existeUsuario(correo)) {
             if (manejadorUsuario.getUsuario(correo).tipoUsuario().equals("Lector")) {
-                manejadorUsuario.suspenderUsuario(correo);
-                JOptionPane.showMessageDialog(null, "Usuario suspendido correctamente.");
+                manejadorUsuario.suspenderUsuario(correo); // ahora alterna activo/inactivo
             }
-            else {
-                JOptionPane.showMessageDialog(null, "Usuario no es un lector.");
-            }
-        }
-        else {
-            JOptionPane.showMessageDialog(null, "Usuario no existe.");
         }
     }
 
@@ -59,14 +51,7 @@ public class Controlador implements IControlador {
         if (manejadorUsuario.existeUsuario(correo)) {
             if (manejadorUsuario.getUsuario(correo).tipoUsuario().equals("Lector")) {
                 manejadorUsuario.cambiarZona(correo, zona);
-                JOptionPane.showMessageDialog(null, "Zona cambiada correctamente.");
             }
-            else {
-                JOptionPane.showMessageDialog(null, "Usuario no es un lector.");
-            }
-        }
-        else {
-            JOptionPane.showMessageDialog(null, "Usuario no existe.");
         }
     }
 
@@ -136,7 +121,6 @@ public class Controlador implements IControlador {
             // Persistir el préstamo
             em.persist(prestamo);
             em.getTransaction().commit();
-            JOptionPane.showMessageDialog(null, "Préstamo registrado correctamente.");
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -148,6 +132,10 @@ public class Controlador implements IControlador {
     // Métodos para obtener listas de datos
     public List<String> listarLectores() {
         return manejadorUsuario.listarLectores();
+    }
+    
+    public List<String> listarLectoresSuspendidos() {
+        return manejadorUsuario.listarLectoresSuspendidos();
     }
     
     public List<String> listarBibliotecarios() {
@@ -202,7 +190,6 @@ public class Controlador implements IControlador {
             em.merge(prestamo);
             
             em.getTransaction().commit();
-            JOptionPane.showMessageDialog(null, "Préstamo actualizado correctamente.");
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();

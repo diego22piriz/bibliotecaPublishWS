@@ -62,11 +62,12 @@ public class ManejadorUsuario {
         Conexion conexion = Conexion.getInstancia();
         EntityManager em = conexion.getEntityManager();
         em.getTransaction().begin();
-        Usuario lector = em.find(Usuario.class, correo);
-        ((Lector)lector).setActivo(false);
+        Usuario usuario = em.find(Usuario.class, correo);
+        if (usuario instanceof Lector) {
+            Lector lector = (Lector) usuario;
+            lector.setActivo(!lector.getActivo()); // alternar estado
+        }
         em.getTransaction().commit();
-        
-
     }
     public Usuario getUsuario(String correo) {
         Conexion conexion = Conexion.getInstancia();
@@ -96,6 +97,12 @@ public class ManejadorUsuario {
     @SuppressWarnings("unchecked")
     public List<String> listarLectores() {
         Query query = em.createQuery("SELECT l.correo FROM Lector l");
+        return query.getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<String> listarLectoresSuspendidos() {
+        Query query = em.createQuery("SELECT l.correo FROM Lector l WHERE l.activo = false");
         return query.getResultList();
     }
     

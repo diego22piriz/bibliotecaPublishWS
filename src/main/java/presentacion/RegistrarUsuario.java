@@ -51,7 +51,7 @@ public class RegistrarUsuario extends JPanel {
 
         JLabel lblPassword = new JLabel("Contraseña:");
         lblPassword.setFont(new Font("Arial", Font.BOLD, 12));
-        JTextField txtPassword = new JTextField(20);
+        JPasswordField txtPassword = new JPasswordField(20);
         
         // Campo Tipo de Usuario
         JLabel lblTipo = new JLabel("Tipo de Usuario:");
@@ -64,6 +64,7 @@ public class RegistrarUsuario extends JPanel {
         camposBasicos.add(txtNombre);
         camposBasicos.add(lblCorreo);
         camposBasicos.add(txtCorreo);
+        camposBasicos.add(lblPassword);
         camposBasicos.add(txtPassword);
         camposBasicos.add(lblTipo);
         camposBasicos.add(cmbTipo);
@@ -145,7 +146,7 @@ public class RegistrarUsuario extends JPanel {
         JButton btnRegistrar = createActionButton("Registrar Usuario", new Color(46, 204, 113));
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                registrarUsuario(txtNombre.getText(), txtCorreo.getText(), txtPassword.getText(),
+                registrarUsuario(txtNombre.getText(), txtCorreo.getText(), new String(txtPassword.getPassword()),
                                (String)cmbTipo.getSelectedItem(), txtDireccion.getText(),
                                txtDia.getText(), txtMes.getText(), txtAnio.getText(),
                                chkActivo.isSelected(), (String)cmbZona.getSelectedItem());
@@ -200,6 +201,10 @@ public class RegistrarUsuario extends JPanel {
         }
         if (correo == null || correo.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El correo es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (password == null || password.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La contraseña es obligatoria", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
