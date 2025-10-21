@@ -69,6 +69,16 @@ public class Controlador implements IControlador {
         ManejadorUsuario mUsuario = ManejadorUsuario.getInstancia();
         ManejadorMaterial mMat = ManejadorMaterial.getInstancia();
 
+        System.out.println("[DEBUG] Iniciando agregarPrestamo:");
+        System.out.println("  - Lector: " + dtPrestamo.getLectorCorreo());
+        System.out.println("  - Bibliotecario: " + dtPrestamo.getBibliotecarioCorreo());
+        System.out.println("  - Material ID: " + dtPrestamo.getMaterialId());
+        System.out.println("  - Estado: " + dtPrestamo.getEstado());
+        System.out.println("  - Fecha Solicitud: " + (dtPrestamo.getFechaSolicitud() != null ? 
+            dtPrestamo.getFechaSolicitud().getDia() + "/" + dtPrestamo.getFechaSolicitud().getMes() + "/" + dtPrestamo.getFechaSolicitud().getAnio() : "null"));
+        System.out.println("  - Fecha Devolución: " + (dtPrestamo.getFechaDevolucion() != null ? 
+            dtPrestamo.getFechaDevolucion().getDia() + "/" + dtPrestamo.getFechaDevolucion().getMes() + "/" + dtPrestamo.getFechaDevolucion().getAnio() : "null"));
+
         EntityManager em = Conexion.getInstancia().getEntityManager();
 
         Lector lector = mUsuario.buscarLector(dtPrestamo.getLectorCorreo());
@@ -100,28 +110,43 @@ public class Controlador implements IControlador {
 
         em.getTransaction().begin();
         try {
+            // Re-obtener las entidades en el contexto de persistencia actual
+            Lector lectorManaged = em.find(Lector.class, lector.getCorreo());
+            Bibliotecario bibliotecarioManaged = em.find(Bibliotecario.class, bibliotecario.getCorreo());
+            Material materialManaged = em.find(Material.class, material.getId());
+            
+            if (lectorManaged == null || bibliotecarioManaged == null || materialManaged == null) {
+                throw new IllegalArgumentException("No se pudieron cargar las entidades relacionadas");
+            }
+            
             // Crear el préstamo
             Prestamo prestamo = ManejadorPrestamo.getInstancia().CrearPrestamo(dtPrestamo);
             
             // Establecer la clave compuesta (OBLIGATORIO para entidades con clave compuesta)
-            prestamo.setLectorCorreo(lector.getCorreo());
-            prestamo.setBibliotecarioCorreo(bibliotecario.getCorreo());
-            prestamo.setMaterialId(material.getId());
+            prestamo.setLectorCorreo(lectorManaged.getCorreo());
+            prestamo.setBibliotecarioCorreo(bibliotecarioManaged.getCorreo());
+            prestamo.setMaterialId(materialManaged.getId());
             
-            // Establecer las relaciones
-            prestamo.setLector(lector);
-            prestamo.setBibliotecario(bibliotecario);
-            prestamo.setMaterial(material);
+            // Establecer las relaciones con entidades gestionadas
+            prestamo.setLector(lectorManaged);
+            prestamo.setBibliotecario(bibliotecarioManaged);
+            prestamo.setMaterial(materialManaged);
             
-            // Agregar el préstamo a las entidades relacionadas
-            lector.addPrestamo(prestamo);
-            bibliotecario.addPrestamo(prestamo);
-            material.addPrestamo(prestamo);
+            System.out.println("[DEBUG] Antes de persist - Prestamo:");
+            System.out.println("  - Clave: " + prestamo.getLectorCorreo() + "/" + prestamo.getBibliotecarioCorreo() + "/" + prestamo.getMaterialId());
+            System.out.println("  - Estado: " + prestamo.getEstado());
             
-            // Persistir el préstamo
+            // Persistir el préstamo (no es necesario agregar a las colecciones, JPA lo hace automáticamente)
             em.persist(prestamo);
+            System.out.println("[DEBUG] Después de persist, antes de commit");
+            em.flush(); // Forzar la sincronización con la BD para ver errores específicos
+            System.out.println("[DEBUG] Después de flush");
             em.getTransaction().commit();
+            System.out.println("[DEBUG] Commit exitoso");
         } catch (Exception e) {
+            System.err.println("[ERROR] Error durante la transacción: " + e.getClass().getName());
+            System.err.println("[ERROR] Mensaje: " + e.getMessage());
+            e.printStackTrace();
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }

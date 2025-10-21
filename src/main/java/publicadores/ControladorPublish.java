@@ -76,12 +76,8 @@ public class ControladorPublish {
 	
 	// MÉTODOS PARA PRÉSTAMOS
 	@WebMethod
-	public void agregarPrestamo(DtPrestamo dtPrestamo) {
-		try {
-			icon.agregarPrestamo(dtPrestamo);
-		} catch (Exception e) {
-			System.err.println("Error al agregar préstamo: " + e.getMessage());
-		}
+	public void agregarPrestamo(DtPrestamo dtPrestamo) throws Exception {
+		icon.agregarPrestamo(dtPrestamo);
 	}
 	
 	@WebMethod
