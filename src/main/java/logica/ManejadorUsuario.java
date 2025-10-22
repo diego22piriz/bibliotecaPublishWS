@@ -113,16 +113,24 @@ public class ManejadorUsuario {
     }
 
     public DtUsuario login(String correo, String password) {
+        System.out.println("DEBUG - Buscando usuario con correo: " + correo);
         Usuario usuario = em.find(Usuario.class, correo);
+        System.out.println("DEBUG - Usuario encontrado: " + usuario);
+        
         if (usuario != null) {
+            System.out.println("DEBUG - Contraseña del usuario: " + usuario.getPassword());
+            System.out.println("DEBUG - Contraseña recibida: " + password);
+            
             if (!usuario.getPassword().equals(password)) {
+                System.out.println("DEBUG - Contraseña incorrecta");
                 return null; // Contraseña incorrecta
             }
             else {
+                System.out.println("DEBUG - Contraseña correcta, creando DtUsuario");
                 // Si es Lector
                 if (usuario instanceof Lector) {
                     Lector lector = (Lector) usuario;
-                    return new DtLector(
+                    DtLector dtLector = new DtLector(
                         lector.getNombre(),
                         lector.getCorreo(),
                         lector.getPassword(),
@@ -131,18 +139,23 @@ public class ManejadorUsuario {
                         lector.getActivo(),
                         lector.getRedBiblioteca()
                     );
+                    System.out.println("DEBUG - DtLector creado: " + dtLector.getNombre());
+                    return dtLector;
                 }
                 // Si es Bibliotecario
                 if (usuario instanceof Bibliotecario) {
                     Bibliotecario bibliotecario = (Bibliotecario) usuario;
-                    return new DtBibliotecario(
+                    DtBibliotecario dtBibliotecario = new DtBibliotecario(
                         bibliotecario.getNombre(),
                         bibliotecario.getCorreo(),
                         bibliotecario.getPassword()
                     );
+                    System.out.println("DEBUG - DtBibliotecario creado: " + dtBibliotecario.getNombre());
+                    return dtBibliotecario;
                 }
             }
         }
+        System.out.println("DEBUG - Usuario no encontrado o credenciales incorrectas");
         return null; // Usuario no encontrado
     }
 }

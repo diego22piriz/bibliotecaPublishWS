@@ -176,4 +176,19 @@ public class ControladorPublish {
 			return null;
 		}
 	}
+	
+	@WebMethod
+	public String loginConNombre(String correo, String password) {
+		try {
+			DtUsuario usuario = icon.login(correo, password);
+			if (usuario != null) {
+				// Retornar información del usuario como String
+				return usuario.getClass().getSimpleName() + ":" + correo;
+			}
+			return null;
+		} catch (Exception e) {
+			System.err.println("Error en login: " + e.getMessage());
+			return null;
+		}
+	}
 }
