@@ -5,6 +5,7 @@ import datatypes.DtBibliotecario;
 import datatypes.DtLibro;
 import datatypes.DtArticulo;
 import datatypes.DtPrestamo;
+import datatypes.DtUsuario;
 import excepciones.UsuarioRepetidoException;
 import excepciones.PrestamoDuplicadoException;
 import logica.Prestamo;
@@ -52,4 +53,7 @@ public interface IControlador {
     // Métodos para consultas por zona
     List<String> obtenerTodasLasZonas();
     List<Prestamo> obtenerPrestamosDeZona(String zona);
+    
+    // Método para autenticación
+    DtUsuario login(String correo, String password);
 }

@@ -14,6 +14,7 @@ import datatypes.DtFecha;
 import datatypes.DtLector;
 import datatypes.DtLibro;
 import datatypes.DtPrestamo;
+import datatypes.DtUsuario;
 import interfaces.Fabrica;
 import interfaces.IControlador;
 
@@ -163,6 +164,16 @@ public class ControladorPublish {
 		} catch (Exception e) {
 			System.err.println("Error al listar préstamos: " + e.getMessage());
 			return new String[0];
+		}
+	}
+	
+	@WebMethod
+	public DtUsuario login(String correo, String password) {
+		try {
+			return icon.login(correo, password);
+		} catch (Exception e) {
+			System.err.println("Error en login: " + e.getMessage());
+			return null;
 		}
 	}
 }
