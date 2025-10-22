@@ -295,6 +295,26 @@ public class Controlador implements IControlador {
     public DtUsuario login(String correo, String password) {
         return ManejadorUsuario.getInstancia().login(correo, password);
     }
+    
+    public void cambiarEstadoPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId, datatypes.EstadoPrestamo nuevoEstado) {
+        ManejadorPrestamo.getInstancia().cambiarEstadoPrestamo(lectorCorreo, bibliotecarioCorreo, materialId, nuevoEstado);
+    }
+    
+    public List<String> listarPrestamosString() {
+        List<Prestamo> prestamos = ManejadorPrestamo.getInstancia().listarPrestamos();
+        List<String> prestamosString = new ArrayList<>();
+        
+        for (Prestamo prestamo : prestamos) {
+            String info = String.format("Préstamo - Lector: %s, Bibliotecario: %s, Material: %d, Estado: %s", 
+                prestamo.getLectorCorreo(), 
+                prestamo.getBibliotecarioCorreo(), 
+                prestamo.getMaterialId(), 
+                prestamo.getEstado().toString());
+            prestamosString.add(info);
+        }
+        
+        return prestamosString;
+    }
 }
 
 

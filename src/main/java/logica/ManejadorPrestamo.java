@@ -101,4 +101,25 @@ public class ManejadorPrestamo {
             .map(RedBiblioteca::name)
             .collect(Collectors.toList());
     }
+    
+    // Cambiar estado de un préstamo
+    public void cambiarEstadoPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId, datatypes.EstadoPrestamo nuevoEstado) {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        em.getTransaction().begin();
+        try {
+            Prestamo prestamo = buscarPrestamo(lectorCorreo, bibliotecarioCorreo, materialId);
+            if (prestamo == null) {
+                throw new IllegalArgumentException("Préstamo no encontrado");
+            }
+            
+            prestamo.setEstado(nuevoEstado);
+            em.merge(prestamo);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Error al cambiar estado del préstamo: " + e.getMessage(), e);
+        }
+    }
 }

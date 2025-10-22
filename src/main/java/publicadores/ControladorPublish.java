@@ -145,4 +145,24 @@ public class ControladorPublish {
 	public String[] obtenerTodasLasZonas() {
 		return icon.obtenerTodasLasZonas().toArray(new String[0]);
 	}
+	
+	@WebMethod
+	public void cambiarEstadoPrestamo(String lectorCorreo, String bibliotecarioCorreo, Long materialId, String nuevoEstado) {
+		try {
+			datatypes.EstadoPrestamo estado = datatypes.EstadoPrestamo.valueOf(nuevoEstado);
+			icon.cambiarEstadoPrestamo(lectorCorreo, bibliotecarioCorreo, materialId, estado);
+		} catch (Exception e) {
+			System.err.println("Error al cambiar estado del préstamo: " + e.getMessage());
+		}
+	}
+	
+	@WebMethod
+	public String[] listarPrestamosString() {
+		try {
+			return icon.listarPrestamosString().toArray(new String[0]);
+		} catch (Exception e) {
+			System.err.println("Error al listar préstamos: " + e.getMessage());
+			return new String[0];
+		}
+	}
 }
