@@ -12,15 +12,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DtFecha {
     
-    @Column(name = "dia")
+    @Column(name = "day")
     @XmlElement(name = "dia")
     private int dia;
     
-    @Column(name = "mes")
+    @Column(name = "month")
     @XmlElement(name = "mes")
     private int mes;
     
-    @Column(name = "anio")
+    @Column(name = "year")
     @XmlElement(name = "anio")
     private int anio;
 

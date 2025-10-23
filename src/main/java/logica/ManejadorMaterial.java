@@ -178,22 +178,22 @@ public class ManejadorMaterial {
         // Consulta para obtener materiales registrados entre las fechas especificadas
         Query query = em.createQuery(
             "SELECT m FROM Material m " +
-            "WHERE m.fechaIngreso.year >= :añoInicio AND m.fechaIngreso.year <= :añoFin " +
-            "AND ((m.fechaIngreso.year > :añoInicio) OR " +
-            "     (m.fechaIngreso.year = :añoInicio AND m.fechaIngreso.month > :mesInicio) OR " +
-            "     (m.fechaIngreso.year = :añoInicio AND m.fechaIngreso.month = :mesInicio AND m.fechaIngreso.day >= :diaInicio)) " +
-            "AND ((m.fechaIngreso.year < :añoFin) OR " +
-            "     (m.fechaIngreso.year = :añoFin AND m.fechaIngreso.month < :mesFin) OR " +
-            "     (m.fechaIngreso.year = :añoFin AND m.fechaIngreso.month = :mesFin AND m.fechaIngreso.day <= :diaFin)) " +
-            "ORDER BY m.fechaIngreso.year, m.fechaIngreso.month, m.fechaIngreso.day"
+            "WHERE m.fechaIngreso.anio >= :añoInicio AND m.fechaIngreso.anio <= :añoFin " +
+            "AND ((m.fechaIngreso.anio > :añoInicio) OR " +
+            "     (m.fechaIngreso.anio = :añoInicio AND m.fechaIngreso.mes > :mesInicio) OR " +
+            "     (m.fechaIngreso.anio = :añoInicio AND m.fechaIngreso.mes = :mesInicio AND m.fechaIngreso.dia >= :diaInicio)) " +
+            "AND ((m.fechaIngreso.anio < :añoFin) OR " +
+            "     (m.fechaIngreso.anio = :añoFin AND m.fechaIngreso.mes < :mesFin) OR " +
+            "     (m.fechaIngreso.anio = :añoFin AND m.fechaIngreso.mes = :mesFin AND m.fechaIngreso.dia <= :diaFin)) " +
+            "ORDER BY m.fechaIngreso.anio, m.fechaIngreso.mes, m.fechaIngreso.dia"
         );
         
-        query.setParameter("añoInicio", fechaInicio.getYear());
-        query.setParameter("mesInicio", fechaInicio.getMonth());
-        query.setParameter("diaInicio", fechaInicio.getDay());
-        query.setParameter("añoFin", fechaFin.getYear());
-        query.setParameter("mesFin", fechaFin.getMonth());
-        query.setParameter("diaFin", fechaFin.getDay());
+        query.setParameter("añoInicio", fechaInicio.getAnio());
+        query.setParameter("mesInicio", fechaInicio.getMes());
+        query.setParameter("diaInicio", fechaInicio.getDia());
+        query.setParameter("añoFin", fechaFin.getAnio());
+        query.setParameter("mesFin", fechaFin.getMes());
+        query.setParameter("diaFin", fechaFin.getDia());
         
         @SuppressWarnings("unchecked")
         List<Material> resultados = query.getResultList();
