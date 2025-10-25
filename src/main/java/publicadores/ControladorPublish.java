@@ -158,6 +158,15 @@ public class ControladorPublish {
 	}
 	
 	@WebMethod
+	public void actualizarPrestamo(DtPrestamo dtPrestamo) {
+		try {
+			icon.actualizarPrestamo(dtPrestamo);
+		} catch (Exception e) {
+			System.err.println("Error al actualizar préstamo: " + e.getMessage());
+		}
+	}
+	
+	@WebMethod
 	public String[] listarPrestamosString() {
 		try {
 			return icon.listarPrestamosString().toArray(new String[0]);
