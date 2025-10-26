@@ -162,6 +162,11 @@ public class ControladorPublish {
 	}
 	
 	@WebMethod
+	public String[] listarMaterialesConMuchosPrestamos(int cantidadMinima) {
+		return icon.listarMaterialesConMuchosPrestamos(cantidadMinima).toArray(new String[0]);
+	}
+	
+	@WebMethod
 	public String[] obtenerPrestamosDeZona(String zona) {
 		java.util.List<logica.Prestamo> prestamos = icon.obtenerPrestamosDeZona(zona);
 		java.util.List<String> res = new java.util.ArrayList<>();

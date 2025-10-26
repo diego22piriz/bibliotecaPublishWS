@@ -315,6 +315,10 @@ public class Controlador implements IControlador {
         
         return prestamosString;
     }
+    
+    public List<String> listarMaterialesConMuchosPrestamos(int cantidadMinima) {
+        return ManejadorMaterial.getInstancia().listarMaterialesConMuchosPrestamos(cantidadMinima);
+    }
 }
 
 

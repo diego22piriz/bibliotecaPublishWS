@@ -200,5 +200,51 @@ public class ManejadorMaterial {
         return resultados;
     }
     
+    // Listar materiales con igual o más préstamos que la cantidad especificada
+    public List<String> listarMaterialesConMuchosPrestamos(int cantidadMinima) {
+        EntityManager em = Conexion.getInstancia().getEntityManager();
+        List<String> resultados = new ArrayList<>();
+        
+        // Consulta para obtener materiales con igual o más préstamos que la cantidad especificada
+        Query query = em.createQuery(
+            "SELECT p.material.id, COUNT(p) " +
+            "FROM Prestamo p " +
+            "GROUP BY p.material.id " +
+            "HAVING COUNT(p) >= :cantidadMinima " +
+            "ORDER BY COUNT(p) DESC"
+        );
+        query.setParameter("cantidadMinima", (long) cantidadMinima);
+        
+        @SuppressWarnings("unchecked")
+        List<Object[]> resultadosQuery = query.getResultList();
+        
+        // Convertir resultados a strings legibles
+        for (Object[] resultado : resultadosQuery) {
+            Long materialId = (Long) resultado[0];
+            Long cantidadPrestamos = (Long) resultado[1];
+            
+            // Buscar información del material
+            Material material = em.find(Material.class, materialId);
+            if (material != null) {
+                String tipoMaterial = material.getClass().getSimpleName();
+                String descripcion;
+                
+                if (material instanceof Libro) {
+                    descripcion = ((Libro) material).getTitulo();
+                } else if (material instanceof Articulo) {
+                    descripcion = ((Articulo) material).getDescripcion();
+                } else {
+                    descripcion = "Material " + materialId;
+                }
+                
+                String info = String.format("ID: %d | Tipo: %s | Descripción: %s | Préstamos: %d",
+                    materialId, tipoMaterial, descripcion, cantidadPrestamos);
+                resultados.add(info);
+            }
+        }
+        
+        return resultados;
+    }
+    
     
 }
