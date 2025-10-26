@@ -105,6 +105,8 @@
                 <configuration>
                     <executable>java</executable>
                     <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
                         <argument>--add-opens</argument>
                         <argument>java.base/jdk.internal.misc=ALL-UNNAMED</argument>
                         <argument>--add-opens</argument>
@@ -112,9 +114,11 @@
                         <argument>--add-opens</argument>
                         <argument>java.base/java.util=ALL-UNNAMED</argument>
                         <argument>--add-opens</argument>
-                        <argument>java.base/java.nio=ALL-UNNAMED</argument>
-                        <argument>-classpath</argument>
-                        <classpath/>
+                        <argument>java.base/java.lang.reflect=ALL-UNNAMED</argument>
+                        <argument>--add-opens</argument>
+                        <argument>java.base/java.text=ALL-UNNAMED</argument>
+                        <argument>--add-opens</argument>
+                        <argument>java.desktop/java.awt.font=ALL-UNNAMED</argument>
                         <argument>presentacion.Principal</argument>
                     </arguments>
                 </configuration>

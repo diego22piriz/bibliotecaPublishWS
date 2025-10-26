@@ -54,6 +54,9 @@ public interface IControlador {
     List<String> obtenerTodasLasZonas();
     List<Prestamo> obtenerPrestamosDeZona(String zona);
     
+    // Métodos para consultas material por cantidad
+    List<String> listarMaterialesConMuchosPrestamos(int cantidadMinima);
+    
     // Método para autenticación
     DtUsuario login(String correo, String password);
 }
