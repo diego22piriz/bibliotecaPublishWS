@@ -3,6 +3,7 @@ package interfaces;
 import datatypes.DtLector;
 import datatypes.DtBibliotecario;
 import datatypes.DtLibro;
+import datatypes.DtMaterial;
 import datatypes.DtArticulo;
 import datatypes.DtPrestamo;
 import excepciones.UsuarioRepetidoException;
@@ -50,4 +51,8 @@ public interface IControlador {
     // Métodos para consultas por zona
     List<String> obtenerTodasLasZonas();
     List<Prestamo> obtenerPrestamosDeZona(String zona);
+
+
+    // Métodos para consultas material por cantidad
+    List<String> listarMaterialesConMuchosPrestamos(int cantidadMinima);
 }

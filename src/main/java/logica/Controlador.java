@@ -6,6 +6,7 @@ import excepciones.PrestamoDuplicadoException;
 import datatypes.DtBibliotecario;
 import datatypes.DtLector;
 import datatypes.DtLibro;
+import datatypes.DtMaterial;
 import datatypes.DtPrestamo;
 import datatypes.DtUsuario;
 import datatypes.DtArticulo;
@@ -294,6 +295,38 @@ public class Controlador implements IControlador {
 
     public DtUsuario login(String correo, String password) {
         return ManejadorUsuario.getInstancia().login(correo, password);
+    }
+
+    // Métodos para consultas material por cantidad
+    public List<String> listarMaterialesConMuchosPrestamos(int cantidadMinima) {
+        List<Object[]> resultados = manejadorMaterial.obtenerMaterialesConPrestamosPendientes();
+        List<String> materialesInfo = new ArrayList<>();
+
+        for (Object[] fila : resultados) {
+            Long materialId = (Long) fila[0];
+            Long cantidadPrestamos = (Long) fila[1];
+
+            if (cantidadPrestamos == null) continue;
+            if (cantidadPrestamos < cantidadMinima) continue;
+
+            // Buscar el material por id (entidad Material)
+            Material material = manejadorMaterial.buscarMaterial(materialId);
+            if (material == null) continue;
+
+            String tipoMaterial = material instanceof Libro ? "LIBRO" : "ARTÍCULO";
+            String nombreMaterial;
+            if (material instanceof Libro) {
+                nombreMaterial = ((Libro) material).getTitulo();
+            } else {
+                nombreMaterial = ((Articulo) material).getDescripcion();
+            }
+
+            String info = String.format("ID: %d | Tipo: %s | Nombre: %s | Préstamos Pendientes: %d",
+                material.getId(), tipoMaterial, nombreMaterial, cantidadPrestamos);
+            materialesInfo.add(info);
+        }
+
+        return materialesInfo;
     }
 }
 

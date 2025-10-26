@@ -145,4 +145,9 @@ public class ControladorPublish {
 	public String[] obtenerTodasLasZonas() {
 		return icon.obtenerTodasLasZonas().toArray(new String[0]);
 	}
+
+	@WebMethod
+	public String[] listarMaterialesConMuchosPrestamos(int cantidadMinima) {
+		return icon.listarMaterialesConMuchosPrestamos(cantidadMinima).toArray(new String[0]);
+	}
 }
